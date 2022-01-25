@@ -30,7 +30,7 @@
 <meta property="og:description" content="b站尚硅谷谷粒学院系列">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-01-20T09:13:09.000Z">
-<meta property="article:modified_time" content="2022-01-25T07:35:47.956Z">
+<meta property="article:modified_time" content="2022-01-25T07:47:13.491Z">
 <meta property="article:author" content="布布子">
 <meta property="article:tag" content="springboot">
 <meta property="article:tag" content="springcloud">
@@ -224,7 +224,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-01-25 15:35:47" itemprop="dateModified" datetime="2022-01-25T15:35:47+08:00">2022-01-25</time>
+                <time title="修改时间：2022-01-25 15:47:13" itemprop="dateModified" datetime="2022-01-25T15:47:13+08:00">2022-01-25</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -249,14 +249,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>838</span>
+              <span>3.6k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
+              <span>3 分钟</span>
             </span>
             <div class="post-description">b站尚硅谷谷粒学院系列</div>
 
@@ -278,6 +278,20 @@
 
 <p>控制台输出以下就成功解决</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Located property source: CompositePropertySource &#123;name=<span class="string">&#x27;NACOS&#x27;</span>, propertySources=[NacosPropertySource &#123;name=<span class="string">&#x27;gulimall-coupon.properties&#x27;</span>&#125;]&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="千万注意application-yml中的缩进"><a href="#千万注意application-yml中的缩进" class="headerlink" title="千万注意application.yml中的缩进"></a>千万注意application.yml中的缩进</h4><p>坑死了，不小心多按了一个tab，检查了一个多小时，记录一下</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">cloud:</span></span><br><span class="line">      <span class="attr">gateway:</span></span><br><span class="line">        <span class="attr">routes:</span></span><br><span class="line">          <span class="bullet">-</span> <span class="attr">id:</span> <span class="string">query_route</span> <span class="comment"># 规则id</span></span><br><span class="line">            <span class="attr">uri:</span> <span class="string">https://baidu.com</span> <span class="comment"># 目的地址</span></span><br><span class="line">            <span class="attr">predicates:</span></span><br><span class="line">              <span class="bullet">-</span> <span class="string">Query=url,</span> <span class="string">baidu</span> <span class="comment"># 断言匹配，满足就跳转到目的地址</span></span><br><span class="line">          <span class="bullet">-</span> <span class="attr">id:</span> <span class="string">qq_test</span></span><br><span class="line">            <span class="attr">uri:</span> <span class="string">https://qq.com</span></span><br><span class="line">            <span class="attr">predicates:</span></span><br><span class="line">              <span class="bullet">-</span> <span class="string">Query=url,</span> <span class="string">qq</span></span><br><span class="line">          <span class="bullet">-</span> <span class="attr">id:</span> <span class="string">admin_route</span></span><br><span class="line">            <span class="attr">uri:</span> <span class="string">lb://renren-fast</span></span><br><span class="line">            <span class="attr">predicates:</span></span><br><span class="line">              <span class="bullet">-</span> <span class="string">Path=/api/**</span></span><br><span class="line">            <span class="attr">filters:</span></span><br><span class="line">              <span class="bullet">-</span> <span class="string">RewritePath=/api/(?&lt;segment&gt;.*),/renren-fast/$\&#123;segment&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>可以看见cloud和gateway之间多按了一个<strong>tab</strong>导致启动时，既不报错，也不提示，最后运行时始终无法排除问题，mark一下。</p>
+<h4 id="在p62中OSS存在依赖问题"><a href="#在p62中OSS存在依赖问题" class="headerlink" title="在p62中OSS存在依赖问题"></a>在p62中OSS存在依赖问题</h4><p>报错如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">Caused by: java.lang.NoSuchMethodError: com.aliyuncs.profile.DefaultProfile.getHttpClientConfig()Lcom/aliyuncs/http/HttpClientConfig;</span><br><span class="line">	at com.alibaba.cloud.context.AliCloudSdk.&lt;init&gt;(AliCloudSdk.java:<span class="number">76</span>)</span><br><span class="line">	at com.alibaba.cloud.context.edas.AliCloudEdasSdkFactory.getDefaultAliCloudEdasSdk(AliCloudEdasSdkFactory.java:<span class="number">34</span>)</span><br><span class="line">	at com.alibaba.cloud.spring.boot.context.autoconfigure.EdasContextAutoConfiguration.aliCloudEdasSdk(EdasContextAutoConfiguration.java:<span class="number">42</span>)</span><br><span class="line">	at com.alibaba.cloud.spring.boot.context.autoconfigure.EdasContextAutoConfiguration$$EnhancerBySpringCGLIB$$41856d21.CGLIB$aliCloudEdasSdk$<span class="number">0</span>(&lt;generated&gt;)</span><br><span class="line">	at com.alibaba.cloud.spring.boot.context.autoconfigure.EdasContextAutoConfiguration$$EnhancerBySpringCGLIB$$41856d21$$FastClassBySpringCGLIB$$ac01ea4e.invoke(&lt;generated&gt;)</span><br><span class="line">	at org.springframework.cglib.proxy.MethodProxy.invokeSuper(MethodProxy.java:<span class="number">244</span>)</span><br><span class="line">	at org.springframework.context.annotation.ConfigurationClassEnhancer$BeanMethodInterceptor.intercept(ConfigurationClassEnhancer.java:<span class="number">363</span>)</span><br><span class="line">	at com.alibaba.cloud.spring.boot.context.autoconfigure.EdasContextAutoConfiguration$$EnhancerBySpringCGLIB$$41856d21.aliCloudEdasSdk(&lt;generated&gt;)</span><br><span class="line">	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)</span><br><span class="line">	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:<span class="number">62</span>)</span><br><span class="line">	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:<span class="number">43</span>)</span><br><span class="line">	at java.base/java.lang.reflect.Method.invoke(Method.java:<span class="number">566</span>)</span><br><span class="line">	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiate(SimpleInstantiationStrategy.java:<span class="number">154</span>)</span><br><span class="line">	... <span class="number">43</span> more</span><br></pre></td></tr></table></figure>
+
+<p>此问题是由于版本依赖问题导致</p>
+<p>修改gulimall-common模块下的pom依赖</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.alibaba.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>aliyun-oss-spring-boot-starter<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.0.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">          <span class="comment">&lt;!-- 此处排除该依赖，包默认依赖版本过低，会导致查找不到方法，引入版本为4.4.x版本 --&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">exclusions</span>&gt;</span></span><br><span class="line">              <span class="tag">&lt;<span class="name">exclusion</span>&gt;</span></span><br><span class="line">                  <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.aliyun<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">                  <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>aliyun-java-sdk-core<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">              <span class="tag">&lt;/<span class="name">exclusion</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;/<span class="name">exclusions</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 引入4.5.x版本依赖 --&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.aliyun<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>aliyun-java-sdk-core<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">version</span>&gt;</span>4.5.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
 
     </div>
 
@@ -376,7 +390,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B8%A9%E5%9D%91"><span class="nav-number">1.</span> <span class="nav-text">踩坑</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E4%B8%80%E6%A0%B7%EF%BC%8C%E9%85%8D%E7%BD%AE%E4%B8%AD%E5%BF%83%E5%8F%91%E5%B8%83%E7%9A%84%E9%85%8D%E7%BD%AE%E6%97%A0%E6%B3%95%E6%AD%A3%E7%A1%AE%E6%9B%B4%E6%96%B0%E8%AF%BB%E5%8F%96%EF%BC%9F"><span class="nav-number">1.1.</span> <span class="nav-text">配置一样，配置中心发布的配置无法正确更新读取？</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B8%A9%E5%9D%91"><span class="nav-number">1.</span> <span class="nav-text">踩坑</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E4%B8%80%E6%A0%B7%EF%BC%8C%E9%85%8D%E7%BD%AE%E4%B8%AD%E5%BF%83%E5%8F%91%E5%B8%83%E7%9A%84%E9%85%8D%E7%BD%AE%E6%97%A0%E6%B3%95%E6%AD%A3%E7%A1%AE%E6%9B%B4%E6%96%B0%E8%AF%BB%E5%8F%96%EF%BC%9F"><span class="nav-number">1.1.</span> <span class="nav-text">配置一样，配置中心发布的配置无法正确更新读取？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8D%83%E4%B8%87%E6%B3%A8%E6%84%8Fapplication-yml%E4%B8%AD%E7%9A%84%E7%BC%A9%E8%BF%9B"><span class="nav-number">1.2.</span> <span class="nav-text">千万注意application.yml中的缩进</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9C%A8p62%E4%B8%ADOSS%E5%AD%98%E5%9C%A8%E4%BE%9D%E8%B5%96%E9%97%AE%E9%A2%98"><span class="nav-number">1.3.</span> <span class="nav-text">在p62中OSS存在依赖问题</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -449,12 +463,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">21k</span>
+    <span title="站点总字数">24k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">19 分钟</span>
+    <span title="站点阅读时长">21 分钟</span>
 </div>
 
         
