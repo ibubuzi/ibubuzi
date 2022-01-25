@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="记录一下常用的js函数">
+<meta property="og:type" content="article">
+<meta property="og:title" content="常用js函数">
+<meta property="og:url" content="http://example.com/2021/04/25/%E5%B8%B8%E7%94%A8js%E5%87%BD%E6%95%B0/index.html">
+<meta property="og:site_name" content="iBubuzi">
+<meta property="og:description" content="记录一下常用的js函数">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-04-25T07:01:58.000Z">
+<meta property="article:modified_time" content="2022-01-25T07:35:47.954Z">
+<meta property="article:author" content="布布子">
+<meta property="article:tag" content="js">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2021/04/25/%E5%B8%B8%E7%94%A8js%E5%87%BD%E6%95%B0/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>常用js函数 | iBubuzi</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="iBubuzi" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+    <a target="_blank" rel="noopener" href="https://github.com/ibubuzi" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">iBubuzi</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/25/%E5%B8%B8%E7%94%A8js%E5%87%BD%E6%95%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="布布子">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="iBubuzi">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          常用js函数
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-04-25 15:01:58" itemprop="dateCreated datePublished" datetime="2021-04-25T15:01:58+08:00">2021-04-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-01-25 15:35:47" itemprop="dateModified" datetime="2022-01-25T15:35:47+08:00">2022-01-25</time>
+              </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>7.8k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>7 分钟</span>
+            </span>
+            <div class="post-description">记录一下常用的js函数</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h3 id="DOM"><a href="#DOM" class="headerlink" title="DOM"></a>DOM</h3><p><strong>检查一个元素是否被聚焦</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> hasFocus = <span class="function">(<span class="params">ele</span>) =&gt;</span> ele === <span class="built_in">document</span>.activeElement</span><br></pre></td></tr></table></figure>
+
+<p><strong>获取一个元素的所有兄弟元素</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> siblings = <span class="function">(<span class="params">ele</span>) =&gt;</span>   .slice.call(ele.parentNode.children).filter(<span class="function">(<span class="params">child</span>) =&gt;</span> child !== ele);</span><br></pre></td></tr></table></figure>
+
+<p><strong>获取选中文本</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> getSelectedText = <span class="function">() =&gt;</span> <span class="built_in">window</span>.getSelection().toString();</span><br></pre></td></tr></table></figure>
+
+<p><strong>回到上一页</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">history.back();<span class="comment">// Orhistory.go(-1);</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>清除所有 cookies</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> cookies = <span class="built_in">document</span>.cookie.split(<span class="string">&#x27;;&#x27;</span>).map(<span class="function">(<span class="params">item</span>) =&gt;</span> item.split(<span class="string">&#x27;=&#x27;</span>)).reduce(<span class="function">(<span class="params">acc, [k, v]</span>) =&gt;</span> (acc[k.trim().replace(<span class="string">&#x27;&quot;&#x27;</span>, <span class="string">&#x27;&#x27;</span>)] = v) &amp;&amp; acc, &#123;&#125;);</span><br></pre></td></tr></table></figure>
+
+<p><strong>将 cookie 转换为对象</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> cookies = <span class="built_in">document</span>.cookie.split(<span class="string">&#x27;;&#x27;</span>).map(<span class="function">(<span class="params">item</span>) =&gt;</span> item.split(<span class="string">&#x27;=&#x27;</span>)).reduce(<span class="function">(<span class="params">acc, [k, v]</span>) =&gt;</span> (acc[k.trim().replace(<span class="string">&#x27;&quot;&#x27;</span>, <span class="string">&#x27;&#x27;</span>)] = v) &amp;&amp; acc, &#123;&#125;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h3><p><strong>比较两个数组</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// `a` 和 `b` 都是数组const isEqual = (a, b) =&gt; JSON.stringify(a) === JSON.stringify(b);// 或者const isEqual = (a, b) =&gt; a.length === b.length &amp;&amp;   a.every((v, i) =&gt; v === b[i]);// 事例isEqual([1, 2, 3], [1, 2, 3]); // trueisEqual([1, 2, 3], [1, &#x27;2&#x27;, 3]); // false</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>将对象数组转换为单个对象</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> toObject = <span class="function">(<span class="params">arr, key</span>) =&gt;</span> arr.reduce(<span class="function">(<span class="params">a, b</span>) =&gt;</span> (&#123; ...a, [b[key]]: b &#125;), &#123;&#125;);</span><br><span class="line"><span class="comment">// Or</span></span><br><span class="line"><span class="keyword">const</span> toObject = <span class="function">(<span class="params">arr, key</span>) =&gt;</span> <span class="built_in">Object</span>.fromEntries(arr.map(<span class="function">(<span class="params">it</span>) =&gt;</span> [it[key], it]));</span><br><span class="line"></span><br><span class="line"><span class="comment">// 事例</span></span><br><span class="line">toObject(</span><br><span class="line">[&#123; <span class="attr">id</span>: <span class="string">&#x27;1&#x27;</span>, <span class="attr">name</span>: <span class="string">&#x27;Alpha&#x27;</span>, <span class="attr">gender</span>: <span class="string">&#x27;Male&#x27;</span> &#125;,</span><br><span class="line">&#123; <span class="attr">id</span>: <span class="string">&#x27;2&#x27;</span>, <span class="attr">name</span>: <span class="string">&#x27;Bravo&#x27;</span>, <span class="attr">gender</span>: <span class="string">&#x27;Male&#x27;</span> &#125;,</span><br><span class="line">&#123; <span class="attr">id</span>: <span class="string">&#x27;3&#x27;</span>, <span class="attr">name</span>: <span class="string">&#x27;Charlie&#x27;</span>, <span class="attr">gender</span>: <span class="string">&#x27;Female&#x27;</span> &#125;]</span><br><span class="line">,<span class="string">&#x27;id&#x27;</span></span><br><span class="line">);</span><br><span class="line"><span class="comment">/*&#123;</span></span><br><span class="line"><span class="comment">&#x27;1&#x27;: &#123; id: &#x27;1&#x27;, name: &#x27;Alpha&#x27;, gender: &#x27;Male&#x27; &#125;,</span></span><br><span class="line"><span class="comment">&#x27;2&#x27;: &#123; id: &#x27;2&#x27;, name: &#x27;Bravo&#x27;, gender: &#x27;Male&#x27; &#125;,</span></span><br><span class="line"><span class="comment">&#x27;3&#x27;: &#123; id: &#x27;3&#x27;, name: &#x27;Charlie&#x27;, gender: &#x27;Female&#x27; &#125;</span></span><br><span class="line"><span class="comment">&#125;*/</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>根据对象数组的属性进行计数</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> countBy </span><br><span class="line">= <span class="function">(<span class="params">arr, prop</span>) =&gt;</span> arr.reduce(<span class="function">(<span class="params">prev, curr</span>) =&gt;</span> ((prev[curr[prop]] = ++prev[curr[prop]] || <span class="number">1</span>), prev), &#123;&#125;);</span><br><span class="line"><span class="comment">// 事例</span></span><br><span class="line">countBy(</span><br><span class="line">[&#123; <span class="attr">branch</span>: <span class="string">&#x27;audi&#x27;</span>, <span class="attr">model</span>: <span class="string">&#x27;q8&#x27;</span>, <span class="attr">year</span>: <span class="string">&#x27;2019&#x27;</span> &#125;,</span><br><span class="line">&#123; <span class="attr">branch</span>: <span class="string">&#x27;audi&#x27;</span>, <span class="attr">model</span>: <span class="string">&#x27;rs7&#x27;</span>, <span class="attr">year</span>: <span class="string">&#x27;2020&#x27;</span> &#125;,</span><br><span class="line">&#123; <span class="attr">branch</span>: <span class="string">&#x27;ford&#x27;</span>, <span class="attr">model</span>: <span class="string">&#x27;mustang&#x27;</span>, <span class="attr">year</span>: <span class="string">&#x27;2019&#x27;</span> &#125;,</span><br><span class="line">&#123; <span class="attr">branch</span>: <span class="string">&#x27;ford&#x27;</span>, <span class="attr">model</span>: <span class="string">&#x27;explorer&#x27;</span>, <span class="attr">year</span>: <span class="string">&#x27;2020&#x27;</span> &#125;,</span><br><span class="line">&#123; <span class="attr">branch</span>: <span class="string">&#x27;bmw&#x27;</span>, <span class="attr">model</span>: <span class="string">&#x27;x7&#x27;</span>, <span class="attr">year</span>: <span class="string">&#x27;2020&#x27;</span> &#125;,]</span><br><span class="line">,<span class="string">&#x27;branch&#x27;</span></span><br><span class="line">);</span><br><span class="line"><span class="comment">// &#123; &#x27;audi&#x27;: 2, &#x27;ford&#x27;: 2, &#x27;bmw&#x27;: 1 &#125;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>检查数组是否为空</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> isNotEmpty = <span class="function">(<span class="params">arr</span>) =&gt;</span> <span class="built_in">Array</span>.isArray(arr) &amp;&amp; <span class="built_in">Object</span>.keys(arr).length &gt; <span class="number">0</span>;</span><br><span class="line"><span class="comment">// 事例</span></span><br><span class="line">isNotEmpty([]);  <span class="comment">// false</span></span><br><span class="line">isNotEmpty([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]); <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="对象"><a href="#对象" class="headerlink" title="对象"></a>对象</h3><p><strong>检查多个对象是否相等</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> isEqual </span><br><span class="line">    = <span class="function">(<span class="params">...objects</span>) =&gt;</span> objects.every(</span><br><span class="line">        (obj) =&gt;  <span class="built_in">JSON</span>.stringify(obj) === <span class="built_in">JSON</span>.stringify(objects[<span class="number">0</span>])</span><br><span class="line">    );</span><br><span class="line"><span class="comment">// 事例</span></span><br><span class="line"><span class="built_in">console</span>.log(isEqual( &#123; <span class="attr">foo</span>: <span class="string">&#x27;bar&#x27;</span> &#125;, &#123; <span class="attr">foo</span>: <span class="string">&#x27;bar&#x27;</span> &#125; ));     <span class="comment">// true</span></span><br><span class="line"><span class="built_in">console</span>.log(isEqual(&#123; <span class="attr">foo</span>: <span class="string">&#x27;bar&#x27;</span> &#125;, &#123; <span class="attr">bar</span>: <span class="string">&#x27;foo&#x27;</span> &#125;));         <span class="comment">// false</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>从对象数组中提取指定属性的值</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> pluck = <span class="function">(<span class="params">objs, property</span>) =&gt;</span> objs.map(<span class="function">(<span class="params">obj</span>) =&gt;</span> obj[property]);</span><br><span class="line"><span class="comment">// Example</span></span><br><span class="line"><span class="keyword">const</span> aa = pluck([</span><br><span class="line">&#123; <span class="attr">name</span>: <span class="string">&#x27;小智&#x27;</span>, <span class="attr">age</span>: <span class="number">20</span> &#125;,</span><br><span class="line">&#123; <span class="attr">name</span>: <span class="string">&#x27;大志&#x27;</span>, <span class="attr">age</span>: <span class="number">25</span> &#125;,</span><br><span class="line">&#123; <span class="attr">name</span>: <span class="string">&#x27;王大志&#x27;</span>, <span class="attr">age</span>: <span class="number">30</span> &#125;,</span><br><span class="line">],</span><br><span class="line"><span class="string">&#x27;name&#x27;</span>);</span><br><span class="line"><span class="comment">// [ &#x27;小智&#x27;, &#x27;大志&#x27;, &#x27;王大志&#x27; ]</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>反转对象的键和值</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> invert </span><br><span class="line">    = <span class="function">(<span class="params">obj</span>) =&gt;</span> <span class="built_in">Object</span>.keys(obj).reduce(</span><br><span class="line">        (res, k) =&gt; <span class="built_in">Object</span>.assign(res, &#123; [obj[k]]: k &#125;</span><br><span class="line">    ), &#123;&#125;);</span><br><span class="line"><span class="comment">// 或</span></span><br><span class="line"><span class="keyword">const</span> invert </span><br><span class="line">    = <span class="function">(<span class="params">obj</span>) =&gt;</span> <span class="built_in">Object</span>.fromEntries(</span><br><span class="line">        <span class="built_in">Object</span>.entries(obj).map(<span class="function">(<span class="params">[k, v]</span>) =&gt;</span> [v, k])</span><br><span class="line">    );    </span><br><span class="line"><span class="comment">// 事例</span></span><br><span class="line">invert(&#123; <span class="attr">a</span>: <span class="string">&#x27;1&#x27;</span>, <span class="attr">b</span>: <span class="string">&#x27;2&#x27;</span>, <span class="attr">c</span>: <span class="string">&#x27;3&#x27;</span> &#125;); <span class="comment">// &#123; 1: &#x27;a&#x27;, 2: &#x27;b&#x27;, 3: &#x27;c&#x27; &#125;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>从对象中删除所有 null 和 undefined 的属性</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> removeNullUndefined = <span class="function">(<span class="params">obj</span>) =&gt;</span> </span><br><span class="line">  <span class="built_in">Object</span>.entries(obj)</span><br><span class="line">   .reduce(<span class="function">(<span class="params">a, [k, v]</span>) =&gt;</span> (v == <span class="literal">null</span> ? a : ((a[k] = v), a)), &#123;&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 或</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> removeNullUndefined = <span class="function">(<span class="params">obj</span>) =&gt;</span></span><br><span class="line">  <span class="built_in">Object</span>.entries(obj)</span><br><span class="line">  .filter(<span class="function">(<span class="params">[_, v]</span>) =&gt;</span> v != <span class="literal">null</span>)</span><br><span class="line">  .reduce(<span class="function">(<span class="params">acc, [k, v]</span>) =&gt;</span> (&#123; ...acc, [k]: v &#125;), &#123;&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 或</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> removeNullUndefined = <span class="function">(<span class="params">obj</span>) =&gt;</span> </span><br><span class="line">    <span class="built_in">Object</span>.fromEntries(<span class="built_in">Object</span>.entries(obj).filter(<span class="function">(<span class="params">[_, v]</span>) =&gt;</span> v != <span class="literal">null</span>));</span><br><span class="line"></span><br><span class="line"><span class="comment">// 例子</span></span><br><span class="line">removeNullUndefined(&#123;</span><br><span class="line">  foo: <span class="literal">null</span>,</span><br><span class="line">  bar: <span class="literal">undefined</span>,</span><br><span class="line">  fuzz: <span class="number">42</span>&#125;</span><br><span class="line">); </span><br><span class="line"><span class="comment">// &#123; fuzz: 42 &#125;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>根据对象的属性对其进行排序</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Object</span>.keys(obj)</span><br><span class="line">  .sort()</span><br><span class="line">  .reduce(<span class="function">(<span class="params">p, c</span>) =&gt;</span> ((p[c] = obj[c]), p), &#123;&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 事例</span></span><br><span class="line"><span class="keyword">const</span> colors = &#123;</span><br><span class="line">  white: <span class="string">&#x27;#ffffff&#x27;</span>,</span><br><span class="line">  black: <span class="string">&#x27;#000000&#x27;</span>,</span><br><span class="line">  red: <span class="string">&#x27;#ff0000&#x27;</span>,</span><br><span class="line">  green: <span class="string">&#x27;#008000&#x27;</span>,</span><br><span class="line">  blue: <span class="string">&#x27;#0000ff&#x27;</span>,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">sort(colors);</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">&#123;</span></span><br><span class="line"><span class="comment">  black: &#x27;#000000&#x27;,</span></span><br><span class="line"><span class="comment">  blue: &#x27;#0000ff&#x27;,</span></span><br><span class="line"><span class="comment">  green: &#x27;#008000&#x27;,</span></span><br><span class="line"><span class="comment">  red: &#x27;#ff0000&#x27;,</span></span><br><span class="line"><span class="comment">  white: &#x27;#ffffff&#x27;,</span></span><br><span class="line"><span class="comment">&#125;</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>检查一个对象是否是Promise</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> isPromise = <span class="function">(<span class="params">obj</span>) =&gt;</span></span><br><span class="line">!!obj &amp;&amp; (<span class="keyword">typeof</span> obj === <span class="string">&#x27;object&#x27;</span> || <span class="keyword">typeof</span> obj === <span class="string">&#x27;function&#x27;</span>) &amp;&amp; </span><br><span class="line"><span class="keyword">typeof</span> obj.then === <span class="string">&#x27;function&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<p><strong>检查一个对象是否是一个数组</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> isArray = <span class="function">(<span class="params">obj</span>) =&gt;</span> <span class="built_in">Array</span>.isArray(obj);</span><br></pre></td></tr></table></figure>
+
+<h3 id="字符串"><a href="#字符串" class="headerlink" title="字符串"></a>字符串</h3><p><strong>检查路径是否是相对路径</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> isRelative = <span class="function">(<span class="params">path</span>) =&gt;</span> !<span class="regexp">/^([a-z]+:)?[\\/]/i</span>.test(path);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 例子</span></span><br><span class="line">isRelative(<span class="string">&#x27;/foo/bar/baz&#x27;</span>); <span class="comment">// false</span></span><br><span class="line">isRelative(<span class="string">&#x27;C:\\foo\\bar\\baz&#x27;</span>); <span class="comment">// false</span></span><br><span class="line">isRelative(<span class="string">&#x27;foo/bar/baz.txt&#x27;</span>); <span class="comment">// true</span></span><br><span class="line">isRelative(<span class="string">&#x27;foo.md&#x27;</span>); <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>将字符串的第一个字符改为小写</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> lowercaseFirst = <span class="function">(<span class="params">str</span>) =&gt;</span> <span class="string">`<span class="subst">$&#123;str.charAt(<span class="number">0</span>).toLowerCase()&#125;</span><span class="subst">$&#123;str.slice(<span class="number">1</span>)&#125;</span>`</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 例子</span></span><br><span class="line">lowercaseFirst(<span class="string">&#x27;Hello World&#x27;</span>); <span class="comment">// &#x27;hello World&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>重复一个字符串</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> repeat = <span class="function">(<span class="params">str, numberOfTimes</span>) =&gt;</span> str.repeat(numberOfTimes);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 例子</span></span><br><span class="line">repeat(<span class="string">&#x27;ab&#x27;</span>, <span class="number">3</span>)</span><br><span class="line"><span class="comment">// ababab</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Dates"><a href="#Dates" class="headerlink" title="Dates"></a>Dates</h3><p><strong>给一个小时添加“am/pm”后缀</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// `h` is an hour number between 0 and 23</span></span><br><span class="line"><span class="keyword">const</span> suffixAmPm = <span class="function">(<span class="params">h</span>) =&gt;</span> <span class="string">`<span class="subst">$&#123;h % <span class="number">12</span> === <span class="number">0</span> ? <span class="number">12</span> : h % <span class="number">12</span>&#125;</span><span class="subst">$&#123;h &lt; <span class="number">12</span> ? <span class="string">&#x27;am&#x27;</span> : <span class="string">&#x27;pm&#x27;</span>&#125;</span>`</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 例子</span></span><br><span class="line">suffixAmPm(<span class="number">0</span>); <span class="comment">// &#x27;12am&#x27;</span></span><br><span class="line">suffixAmPm(<span class="number">5</span>); <span class="comment">// &#x27;5am&#x27;</span></span><br><span class="line">suffixAmPm(<span class="number">12</span>); <span class="comment">// &#x27;12pm&#x27;</span></span><br><span class="line">suffixAmPm(<span class="number">15</span>); <span class="comment">// &#x27;3pm&#x27;</span></span><br><span class="line">suffixAmPm(<span class="number">23</span>); <span class="comment">// &#x27;11pm&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>计算两个日期之间的不同天数</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> diffDays = <span class="function">(<span class="params">date, otherDate</span>) =&gt;</span> <span class="built_in">Math</span>.ceil(<span class="built_in">Math</span>.abs(date - otherDate) / (<span class="number">1000</span> * <span class="number">60</span> * <span class="number">60</span> * <span class="number">24</span>));</span><br><span class="line"></span><br><span class="line"><span class="comment">// 例子</span></span><br><span class="line">diffDays(<span class="keyword">new</span> <span class="built_in">Date</span>(<span class="string">&#x27;2014-12-19&#x27;</span>), <span class="keyword">new</span> <span class="built_in">Date</span>(<span class="string">&#x27;2020-01-01&#x27;</span>)); <span class="comment">// 1839</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>检查日期是否有效</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> isDateValid = <span class="function">(<span class="params">...val</span>) =&gt;</span> !<span class="built_in">Number</span>.isNaN(<span class="keyword">new</span> <span class="built_in">Date</span>(...val).valueOf());</span><br><span class="line"></span><br><span class="line">isDateValid(<span class="string">&quot;December 17, 1995 03:24:00&quot;</span>); <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h3><p><strong>检查代码是否在Node.js中运行</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> isNode = <span class="keyword">typeof</span> process !== <span class="string">&#x27;undefined&#x27;</span> &amp;&amp; process.versions != <span class="literal">null</span> &amp;&amp; </span><br><span class="line">  process.versions.node != <span class="literal">null</span>;</span><br></pre></td></tr></table></figure>
+
+<p><strong>检查代码是否在浏览器中运行</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> isBrowser = <span class="keyword">typeof</span> <span class="built_in">window</span> === <span class="string">&#x27;object&#x27;</span> &amp;&amp; <span class="keyword">typeof</span> <span class="built_in">document</span> === <span class="string">&#x27;object&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<p><strong>将URL参数转换为对象</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> getUrlParams = <span class="function">(<span class="params">query</span>) =&gt;</span><span class="built_in">Array</span>.from(<span class="keyword">new</span>   URLSearchParams(query)).reduce(<span class="function">(<span class="params">p, [k, v]</span>) =&gt;</span> <span class="built_in">Object</span>.assign(&#123;&#125;, p, &#123; [k]: p[k]   ? (<span class="built_in">Array</span>.isArray(p[k]) ? p[k] : [p[k]]).concat(v) : v &#125;),&#123;&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 例子</span></span><br><span class="line">getUrlParams(location.search); <span class="comment">// Get the parameters of the current URL</span></span><br><span class="line">getUrlParams(<span class="string">&#x27;foo=Foo&amp;bar=Bar&#x27;</span>); <span class="comment">// &#123; foo: &quot;Foo&quot;, bar: &quot;Bar&quot; &#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Duplicate key</span></span><br><span class="line">getUrlParams(<span class="string">&#x27;foo=Foo&amp;foo=Fuzz&amp;bar=Bar&#x27;</span>); <span class="comment">// &#123; foo: [&quot;Foo&quot;, &quot;Fuzz&quot;], bar: &quot;Bar&quot; &#125;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>黑暗检测模式</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> isDarkMode = <span class="built_in">window</span>.matchMedia &amp;&amp; <span class="built_in">window</span>.matchMedia(<span class="string">&#x27;(prefers-color-scheme: dark)&#x27;</span>).matches;</span><br></pre></td></tr></table></figure>
+
+<p><strong>拷贝到剪切板</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> copyToClipboard = <span class="function">(<span class="params">text</span>) =&gt;</span> </span><br><span class="line">  navigator.clipboard.writeText(text);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 例子</span></span><br><span class="line">copyToClipboard(<span class="string">&quot;Hello World&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<p><strong>将RGB转换为十六进制</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> rgbToHex = <span class="function">(<span class="params">r, g, b</span>) =&gt;</span>   <span class="string">&quot;#&quot;</span> + ((<span class="number">1</span> &lt;&lt; <span class="number">24</span>) + (r &lt;&lt; <span class="number">16</span>) + (g &lt;&lt; <span class="number">8</span>) + b).toString(<span class="number">16</span>).slice(<span class="number">1</span>);<span class="comment">// 例子rgbToHex(0, 51, 255); // #0033ff</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>生成一个随机的十六进制颜色</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> randomColor = <span class="function">() =&gt;</span> <span class="string">`#<span class="subst">$&#123;<span class="built_in">Math</span>.random().toString(<span class="number">16</span>).slice(<span class="number">2</span>, <span class="number">8</span>).padEnd(<span class="number">6</span>, <span class="string">&#x27;0&#x27;</span>)&#125;</span>`</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 或者</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> randomColor = <span class="function">() =&gt;</span> <span class="string">`#<span class="subst">$&#123;(~~(<span class="built_in">Math</span>.random() * (<span class="number">1</span> &lt;&lt; <span class="number">24</span>))).toString(<span class="number">16</span>)&#125;</span>`</span>;33ff</span><br></pre></td></tr></table></figure>
+
+<p><strong>生成随机IP地址</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> randomIp = <span class="function">() =&gt;</span> <span class="built_in">Array</span>(<span class="number">4</span>).fill(<span class="number">0</span>)</span><br><span class="line">.map(<span class="function">(<span class="params">_, i</span>) =&gt;</span> <span class="built_in">Math</span>.floor(<span class="built_in">Math</span>.random() * <span class="number">255</span>) + (i === <span class="number">0</span> ? <span class="number">1</span> : <span class="number">0</span>))</span><br><span class="line">.join(<span class="string">&#x27;.&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 例子</span></span><br><span class="line">randomIp(); <span class="comment">// 175.89.174.131</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>使用 Node crypto 模块生成随机字符串</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> randomStr = <span class="function">() =&gt;</span> <span class="built_in">require</span>(<span class="string">&#x27;crypto&#x27;</span>).randomBytes(<span class="number">32</span>).toString(<span class="string">&#x27;hex&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+<p><strong>按长度截取字符串</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">splitByLen</span>(<span class="params">str,len</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">let</span> rev    =    []</span><br><span class="line">    <span class="keyword">let</span> reg    =    <span class="keyword">new</span> <span class="built_in">RegExp</span>(<span class="string">`.&#123;<span class="subst">$&#123;len&#125;</span>&#125;`</span>,<span class="string">&#x27;g&#x27;</span>)</span><br><span class="line">    rev    = str.match(reg)</span><br><span class="line">    rev.push(str.substring(rev.join(<span class="string">&#x27;&#x27;</span>).length))</span><br><span class="line">    <span class="keyword">return</span> rev</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>Donate comment here.</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="布布子 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/js/" rel="tag"># js</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/04/22/docker%E5%91%BD%E4%BB%A4%E5%85%A8%E8%A7%A3/" rel="prev" title="docker命令全解">
+      <i class="fa fa-chevron-left"></i> docker命令全解
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/04/25/jd-bot%E8%AE%BE%E7%BD%AE/" rel="next" title="京东签到脚本">
+      京东签到脚本 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#DOM"><span class="nav-number">1.</span> <span class="nav-text">DOM</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E7%BB%84"><span class="nav-number">2.</span> <span class="nav-text">数组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E8%B1%A1"><span class="nav-number">3.</span> <span class="nav-text">对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="nav-number">4.</span> <span class="nav-text">字符串</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Dates"><span class="nav-number">5.</span> <span class="nav-text">Dates</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B6%E5%AE%83"><span class="nav-number">6.</span> <span class="nav-text">其它</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="布布子"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">布布子</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">11</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ibubuzi" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ibubuzi" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:yzw16905@foxmail.com" title="E-Mail → mailto:yzw16905@foxmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">布布子</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">21k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">19 分钟</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+  <script defer src="/lib/three/three.min.js"></script>
+    <script defer src="/lib/three/three-waves.min.js"></script>
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : 'd42a328d596c2759192b',
+      clientSecret: 'f30ea194834638bba7ef02b39331e0b0f469088b',
+      repo        : 'ibubuzi.github.io',
+      owner       : 'ibubuzi',
+      admin       : ['ibubuzi'],
+      id          : 'af4799a142246c22b1f4f1a66d705535',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>
