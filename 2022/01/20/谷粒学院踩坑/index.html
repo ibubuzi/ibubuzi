@@ -30,7 +30,7 @@
 <meta property="og:description" content="b站尚硅谷谷粒学院系列">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-01-20T09:13:09.000Z">
-<meta property="article:modified_time" content="2022-01-25T07:47:13.491Z">
+<meta property="article:modified_time" content="2022-01-31T15:34:05.873Z">
 <meta property="article:author" content="布布子">
 <meta property="article:tag" content="springboot">
 <meta property="article:tag" content="springcloud">
@@ -224,7 +224,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-01-25 15:47:13" itemprop="dateModified" datetime="2022-01-25T15:47:13+08:00">2022-01-25</time>
+                <time title="修改时间：2022-01-31 23:34:05" itemprop="dateModified" datetime="2022-01-31T23:34:05+08:00">2022-01-31</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -249,14 +249,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>3.6k</span>
+              <span>3.9k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>3 分钟</span>
+              <span>4 分钟</span>
             </span>
             <div class="post-description">b站尚硅谷谷粒学院系列</div>
 
@@ -291,6 +291,20 @@
 <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.alibaba.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>aliyun-oss-spring-boot-starter<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.0.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">          <span class="comment">&lt;!-- 此处排除该依赖，包默认依赖版本过低，会导致查找不到方法，引入版本为4.4.x版本 --&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">exclusions</span>&gt;</span></span><br><span class="line">              <span class="tag">&lt;<span class="name">exclusion</span>&gt;</span></span><br><span class="line">                  <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.aliyun<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">                  <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>aliyun-java-sdk-core<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">              <span class="tag">&lt;/<span class="name">exclusion</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;/<span class="name">exclusions</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 引入4.5.x版本依赖 --&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.aliyun<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>aliyun-java-sdk-core<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">version</span>&gt;</span>4.5.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
 
+
+<h4 id="MySql连接存在问题"><a href="#MySql连接存在问题" class="headerlink" title="MySql连接存在问题"></a>MySql连接存在问题</h4><p>在写代码过程中，发现mysql连接非常慢，在修改连接池无果后上网搜索，可能是由于mysql主机的dns存在问题，尝试配置以下内容，情况待定…</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[mysqld]</span></span><br><span class="line">skip-name-resolve</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>补充：</p>
+<p>尝试增加mysql最大连接树解决问题</p>
+<p>通过sql查询当前最大连接数</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">show</span> variables <span class="keyword">like</span> <span class="string">&#x27;max_connections&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>临时修改最大连接数，mysql重启后失效</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">set</span> <span class="keyword">global</span> max_connections<span class="operator">=</span><span class="number">1000</span>;</span><br></pre></td></tr></table></figure>
+
+<p>永久修改连接数，在my.cnf文件中写入</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[mysqld]</span></span><br><span class="line"><span class="attr">max_connections</span>=<span class="number">1000</span></span><br></pre></td></tr></table></figure>
 
 
     </div>
@@ -330,7 +344,10 @@
     <a href="/2021/06/24/%E8%A7%A3%E9%94%81%E7%BD%91%E6%98%93%E4%BA%91%E7%81%B0%E8%89%B2%E6%AD%8C%E6%9B%B2/" rel="prev" title="解锁网易云灰色歌曲">
       <i class="fa fa-chevron-left"></i> 解锁网易云灰色歌曲
     </a></div>
-      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2022/01/25/spring%E9%A1%B9%E7%9B%AE%E4%B8%AD%E7%9A%84%E5%90%8E%E7%AB%AF%E8%A1%A8%E5%8D%95%E9%AA%8C%E8%AF%81/" rel="next" title="spring项目中的后端表单验证">
+      spring项目中的后端表单验证 <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
       </footer>
     
@@ -390,7 +407,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B8%A9%E5%9D%91"><span class="nav-number">1.</span> <span class="nav-text">踩坑</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E4%B8%80%E6%A0%B7%EF%BC%8C%E9%85%8D%E7%BD%AE%E4%B8%AD%E5%BF%83%E5%8F%91%E5%B8%83%E7%9A%84%E9%85%8D%E7%BD%AE%E6%97%A0%E6%B3%95%E6%AD%A3%E7%A1%AE%E6%9B%B4%E6%96%B0%E8%AF%BB%E5%8F%96%EF%BC%9F"><span class="nav-number">1.1.</span> <span class="nav-text">配置一样，配置中心发布的配置无法正确更新读取？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8D%83%E4%B8%87%E6%B3%A8%E6%84%8Fapplication-yml%E4%B8%AD%E7%9A%84%E7%BC%A9%E8%BF%9B"><span class="nav-number">1.2.</span> <span class="nav-text">千万注意application.yml中的缩进</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9C%A8p62%E4%B8%ADOSS%E5%AD%98%E5%9C%A8%E4%BE%9D%E8%B5%96%E9%97%AE%E9%A2%98"><span class="nav-number">1.3.</span> <span class="nav-text">在p62中OSS存在依赖问题</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B8%A9%E5%9D%91"><span class="nav-number">1.</span> <span class="nav-text">踩坑</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E4%B8%80%E6%A0%B7%EF%BC%8C%E9%85%8D%E7%BD%AE%E4%B8%AD%E5%BF%83%E5%8F%91%E5%B8%83%E7%9A%84%E9%85%8D%E7%BD%AE%E6%97%A0%E6%B3%95%E6%AD%A3%E7%A1%AE%E6%9B%B4%E6%96%B0%E8%AF%BB%E5%8F%96%EF%BC%9F"><span class="nav-number">1.1.</span> <span class="nav-text">配置一样，配置中心发布的配置无法正确更新读取？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8D%83%E4%B8%87%E6%B3%A8%E6%84%8Fapplication-yml%E4%B8%AD%E7%9A%84%E7%BC%A9%E8%BF%9B"><span class="nav-number">1.2.</span> <span class="nav-text">千万注意application.yml中的缩进</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9C%A8p62%E4%B8%ADOSS%E5%AD%98%E5%9C%A8%E4%BE%9D%E8%B5%96%E9%97%AE%E9%A2%98"><span class="nav-number">1.3.</span> <span class="nav-text">在p62中OSS存在依赖问题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#MySql%E8%BF%9E%E6%8E%A5%E5%AD%98%E5%9C%A8%E9%97%AE%E9%A2%98"><span class="nav-number">1.4.</span> <span class="nav-text">MySql连接存在问题</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -406,7 +423,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">11</span>
+          <span class="site-state-item-count">13</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -463,12 +480,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">24k</span>
+    <span title="站点总字数">27k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">21 分钟</span>
+    <span title="站点阅读时长">25 分钟</span>
 </div>
 
         

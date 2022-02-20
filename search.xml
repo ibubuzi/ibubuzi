@@ -149,6 +149,11 @@
       </tags>
   </entry>
   <entry>
+    <title>spring项目中使用统一异常处理</title>
+    <url>/2022/01/26/spring%E9%A1%B9%E7%9B%AE%E4%B8%AD%E4%BD%BF%E7%94%A8%E7%BB%9F%E4%B8%80%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/</url>
+    <content><![CDATA[]]></content>
+  </entry>
+  <entry>
     <title>京东签到脚本</title>
     <url>/2021/04/25/jd-bot%E8%AE%BE%E7%BD%AE/</url>
     <content><![CDATA[<div class="hbe hbe-container" id="hexo-blog-encrypt" data-wpm="抱歉, 这个密码看着不太对, 请再试试." data-whm="抱歉, 这个文章不能被校验, 不过您还是能看看解密后的内容.">
@@ -171,6 +176,55 @@
       </tags>
   </entry>
   <entry>
+    <title>spring项目中的后端表单验证</title>
+    <url>/2022/01/25/spring%E9%A1%B9%E7%9B%AE%E4%B8%AD%E7%9A%84%E5%90%8E%E7%AB%AF%E8%A1%A8%E5%8D%95%E9%AA%8C%E8%AF%81/</url>
+    <content><![CDATA[<h1 id="解决Spring项目中后端表单数据验证功能"><a href="#解决Spring项目中后端表单数据验证功能" class="headerlink" title="解决Spring项目中后端表单数据验证功能"></a>解决Spring项目中后端表单数据验证功能</h1><h2 id="JSR303"><a href="#JSR303" class="headerlink" title="JSR303"></a>JSR303</h2><p>采用JSR303库中提供的效验注解</p>
+<p><img src="https://s2.loli.net/2022/01/25/w8LXS4QV91JGPOa.png" alt="image-20220125232949284"></p>
+<h3 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h3><h4 id="在bean的字段添加对应的校验注解-Valid"><a href="#在bean的字段添加对应的校验注解-Valid" class="headerlink" title="在bean的字段添加对应的校验注解(@Valid)"></a>在bean的字段添加对应的校验注解(@Valid)</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@RequestMapping(&quot;/save&quot;)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> R <span class="title">save</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="meta">@Valid</span> // 添加注解确定该对象需要校验</span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="meta">@RequestBody</span> BrandEntity brand)</span></span>&#123;</span><br><span class="line">        brandService.save(brand);</span><br><span class="line">        <span class="keyword">return</span> R.ok();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="返回数据"><a href="#返回数据" class="headerlink" title="返回数据"></a>返回数据</h3><p>当再次进行非法请求时就会返回如下</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">	<span class="attr">&quot;timestamp&quot;</span>: <span class="string">&quot;2022-01-25T15:36:50.377+0000&quot;</span>,</span><br><span class="line">	<span class="attr">&quot;status&quot;</span>: <span class="number">400</span>,</span><br><span class="line">	<span class="attr">&quot;error&quot;</span>: <span class="string">&quot;Bad Request&quot;</span>,</span><br><span class="line">	<span class="attr">&quot;errors&quot;</span>: [</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="attr">&quot;codes&quot;</span>: [</span><br><span class="line">				<span class="string">&quot;NotBlank.brandEntity.name&quot;</span>,</span><br><span class="line">				<span class="string">&quot;NotBlank.name&quot;</span>,</span><br><span class="line">				<span class="string">&quot;NotBlank.java.lang.String&quot;</span>,</span><br><span class="line">				<span class="string">&quot;NotBlank&quot;</span></span><br><span class="line">			],</span><br><span class="line">			<span class="attr">&quot;arguments&quot;</span>: [</span><br><span class="line">				&#123;</span><br><span class="line">					<span class="attr">&quot;codes&quot;</span>: [</span><br><span class="line">						<span class="string">&quot;brandEntity.name&quot;</span>,</span><br><span class="line">						<span class="string">&quot;name&quot;</span></span><br><span class="line">					],</span><br><span class="line">					<span class="attr">&quot;arguments&quot;</span>: <span class="literal">null</span>,</span><br><span class="line">					<span class="attr">&quot;defaultMessage&quot;</span>: <span class="string">&quot;name&quot;</span>,</span><br><span class="line">					<span class="attr">&quot;code&quot;</span>: <span class="string">&quot;name&quot;</span></span><br><span class="line">				&#125;</span><br><span class="line">			],</span><br><span class="line">			<span class="attr">&quot;defaultMessage&quot;</span>: <span class="string">&quot;不能为空&quot;</span>,</span><br><span class="line">			<span class="attr">&quot;objectName&quot;</span>: <span class="string">&quot;brandEntity&quot;</span>,</span><br><span class="line">			<span class="attr">&quot;field&quot;</span>: <span class="string">&quot;name&quot;</span>,</span><br><span class="line">			<span class="attr">&quot;rejectedValue&quot;</span>: <span class="string">&quot;&quot;</span>,</span><br><span class="line">			<span class="attr">&quot;bindingFailure&quot;</span>: <span class="literal">false</span>,</span><br><span class="line">			<span class="attr">&quot;code&quot;</span>: <span class="string">&quot;NotBlank&quot;</span></span><br><span class="line">		&#125;</span><br><span class="line">	],</span><br><span class="line">	<span class="attr">&quot;message&quot;</span>: <span class="string">&quot;Validation failed for object=&#x27;brandEntity&#x27;. Error count: 1&quot;</span>,</span><br><span class="line">	<span class="attr">&quot;path&quot;</span>: <span class="string">&quot;/product/brand/save&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="自定义响应"><a href="#自定义响应" class="headerlink" title="自定义响应"></a>自定义响应</h3><p>jsr默认响应不符合业务规范，将接口改为以下</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@RequestMapping(&quot;/save&quot;)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> R <span class="title">save</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="meta">@Valid</span> // 添加注解确定该对象需要校验</span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="meta">@RequestBody</span> BrandEntity brand, </span></span></span><br><span class="line"><span class="function"><span class="params">	BindingResult result	// 紧跟校验对象</span></span></span><br><span class="line"><span class="function"><span class="params">)</span></span>&#123;</span><br><span class="line">        <span class="comment">// 校验时是否出错</span></span><br><span class="line">        <span class="keyword">if</span>(result.hasErrors())&#123;</span><br><span class="line">            Map&lt;String, String&gt; errMap = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">            <span class="comment">// 获取全部校验错误，取出放入返回值内进行响应</span></span><br><span class="line">            result.getFieldErrors().forEach(error-&gt;&#123;</span><br><span class="line">                String field = error.getField();</span><br><span class="line">                String message = error.getDefaultMessage();</span><br><span class="line">                errMap.put(field,message);</span><br><span class="line">            &#125;);</span><br><span class="line">            <span class="keyword">return</span> R.error(<span class="number">400</span>,<span class="string">&quot;非法参数请求&quot;</span>).put(<span class="string">&quot;data&quot;</span>,errMap);</span><br><span class="line">        &#125;</span><br><span class="line">		brandService.save(brand);</span><br><span class="line">        <span class="keyword">return</span> R.ok();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>其中BindingResult必须紧跟需要校验的对象</p>
+<p>此时非法请求响应如下：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">	<span class="attr">&quot;msg&quot;</span>: <span class="string">&quot;非法参数请求&quot;</span>,</span><br><span class="line">	<span class="attr">&quot;code&quot;</span>: <span class="number">400</span>,</span><br><span class="line">	<span class="attr">&quot;data&quot;</span>: &#123;</span><br><span class="line">		<span class="attr">&quot;name&quot;</span>: <span class="string">&quot;品牌名不能为空&quot;</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="自定义正则校验"><a href="#自定义正则校验" class="headerlink" title="自定义正则校验"></a>自定义正则校验</h3><p>在需要正则效验的字段上使用**@Pattern**注解</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BrandEntity</span> <span class="keyword">implements</span> <span class="title">Serializable</span> </span>&#123;</span><br><span class="line">    <span class="comment">// other field.....</span></span><br><span class="line">    <span class="meta">@Pattern(regexp = &quot;/[a-zA-Z]$&quot;, message = &quot;检索首字母必须是一个字母&quot;)</span></span><br><span class="line">	<span class="keyword">private</span> String firstLetter;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="隐藏问题"><a href="#隐藏问题" class="headerlink" title="隐藏问题"></a>隐藏问题</h3><p>单个注解下，在不添加非空校验时，只有提交才会进行校验</p>
+<p>所以若要保证字段安全校验，必须配合使用非空校验</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@NotBlank(message = &quot;检索首字母不能为空&quot;)</span></span><br><span class="line"><span class="meta">@Pattern(regexp = &quot;/[a-zA-Z]$&quot;, message = &quot;检索首字母必须是一个字母&quot;)</span></span><br><span class="line"><span class="comment">// other...</span></span><br><span class="line"><span class="keyword">private</span> String firstLetter;</span><br></pre></td></tr></table></figure>
+
+<h2 id="分组校验"><a href="#分组校验" class="headerlink" title="分组校验"></a>分组校验</h2><p>应对不同业务下的校验规则</p>
+<p>比如当新增时，需要输入全部数据，但是当修改时，只需要提交对应修改后的字段</p>
+<p>此时就需要进行分组校验</p>
+<h3 id="流程-1"><a href="#流程-1" class="headerlink" title="流程"></a>流程</h3><h4 id="修改注解"><a href="#修改注解" class="headerlink" title="修改注解"></a>修改注解</h4><p>采用 <strong>JSR303</strong> 注解的的 <strong>groups</strong> 属性进行分组校验，</p>
+<p>groups要求传入Class对象，</p>
+<p>如下，其中AddGroup和UpdateGroup为空接口即可；</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@NotBlank(message = &quot;品牌名不能为空&quot;,groups = &#123;AddGroup.class,UpdateGroup.class&#125;)</span></span><br><span class="line"><span class="keyword">private</span> String name;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">AddGroup</span> </span>&#123;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">UpdateGroup</span> </span>&#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>不同group表示在不同情况下需要校验</p>
+<blockquote>
+<p>注意：当使用group校验后，其他未添加分组的校验将会失效；为保证所有校验正常运行，确保其添加正确分组；</p>
+</blockquote>
+<p>不同注解和分组可以组合使用，如下</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@NotBlank(groups = &#123;AddGroup.class&#125;)</span></span><br><span class="line"><span class="meta">@Pattern(regexp = &quot;/[a-zA-Z]$&quot;, message = &quot;检索首字母必须是一个字母&quot;,groups = &#123;AddGroup.class,UpdateGroup.class&#125;)</span></span><br><span class="line"><span class="keyword">private</span> String firstLetter;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>当在AddGroup新增模式下时同时触发@NotBlank和@Pattern校验，但在UpdateGroup更新模式下时只会触发@Pattern校验</p>
+</blockquote>
+<h4 id="修改controller"><a href="#修改controller" class="headerlink" title="修改controller"></a>修改controller</h4><p>将此前的 <strong>@Valid</strong> 注解修改为 <strong>@Validated</strong> 注解，并填入触发的校验组 <strong>AddGroup</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@RequestMapping(&quot;/save&quot;)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> R <span class="title">save</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="meta">@Validated(AddGroup.class)</span> </span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="meta">@RequestBody</span> BrandEntity brand</span></span></span><br><span class="line"><span class="function"><span class="params">)</span></span>&#123;</span><br><span class="line">    brandService.save(brand);</span><br><span class="line">    <span class="keyword">return</span> R.ok();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+]]></content>
+  </entry>
+  <entry>
     <title>区块链笔记</title>
     <url>/2021/05/16/%E5%8C%BA%E5%9D%97%E9%93%BE%E7%AC%94%E8%AE%B0/</url>
     <content><![CDATA[<h2 id="什么是区块链？"><a href="#什么是区块链？" class="headerlink" title="什么是区块链？"></a>什么是区块链？</h2><p>区块链是一个信息技术领域的术语。从本质上讲，它是一个共享数据库，存储于其中的数据或信息，具有<strong>“去中心化”</strong>、<strong>“不可伪造”</strong>、<strong>“全程留痕”</strong>、<strong>“可以追溯”</strong>、<strong>“公开透明”</strong>、<strong>“集体维护”</strong>等特征。基于这些特征，区块链技术奠定了坚实的“信任”基础，创造了可靠的“合作”机制，具有广阔的运用前景。</p>
@@ -183,90 +237,6 @@
       </categories>
       <tags>
         <tag>区块链</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>汇编指令</title>
-    <url>/2021/05/17/%E6%B1%87%E7%BC%96%E6%8C%87%E4%BB%A4/</url>
-    <content><![CDATA[<h2 id="寄存器"><a href="#寄存器" class="headerlink" title="寄存器"></a>寄存器</h2><h3 id="16位寄存器"><a href="#16位寄存器" class="headerlink" title="16位寄存器"></a>16位寄存器</h3><ul>
-<li>AX: accumulator, 累加寄存器</li>
-<li>CX: counter, 计数寄存器</li>
-<li>DX: data, 数据寄存器</li>
-<li>BX: base, 基址寄存器</li>
-<li>SP: stack pointer, 栈指针寄存器</li>
-<li>BP: base pointer, 基址指针寄存器</li>
-<li>SI: source index, 源变址寄存器</li>
-<li>DI: destination index, 目的变址寄存器</li>
-</ul>
-<h3 id="8位寄存器"><a href="#8位寄存器" class="headerlink" title="8位寄存器"></a>8位寄存器</h3><ul>
-<li><p>AL: 累加寄存器低位</p>
-</li>
-<li><p>CL: 计数寄存器低位</p>
-</li>
-<li><p>DL: 数据寄存器低位</p>
-</li>
-<li><p>BL: 基址寄存器低位</p>
-</li>
-<li><p>AH: 累加寄存器高位</p>
-</li>
-<li><p>CH: 计数寄存器高位</p>
-</li>
-<li><p>DH: 数据寄存器高位</p>
-</li>
-<li><p>BH: 基址寄存器高位</p>
-</li>
-</ul>
-<h3 id="32位寄存器"><a href="#32位寄存器" class="headerlink" title="32位寄存器"></a>32位寄存器</h3><p>EAX, ECX, EDX, EBX, ESP, EBP, ESI, EDI</p>
-<p>在16位寄存器的指令前加E即可表示32位寄存器, 这个字母E来源于英文单词 “Extend”;</p>
-<p>虽说EAX是一个32位寄存器, 但是他的高位即没有名字也没有编号, , 也就是说, 虽然我们可以吧EAX作为两个16位寄存器使用, 但只有低十六位用起来方便, 如果我们需要使用高16位时, 需要将高十六位移位至低十六;</p>
-<h3 id="段寄存器"><a href="#段寄存器" class="headerlink" title="段寄存器"></a>段寄存器</h3><ul>
-<li>ES: 附加段寄存器 ( extra segment )</li>
-<li>CS: 代码段寄存器 ( code segment )</li>
-<li>SS: 栈段寄存器 ( stack segment )</li>
-<li>DS: 数据段寄存器 ( data segment )</li>
-<li>FS: 附加段寄存器 ( extra segment )</li>
-<li>GS: 附加段寄存器 ( extra segment )</li>
-</ul>
-<h2 id="DB"><a href="#DB" class="headerlink" title="DB"></a>DB</h2><p>db是”data byte”的缩写, 指向文件中写入一个字节</p>
-<p>db a, b, c;</p>
-<p>写入a, b, c至文件</p>
-<p>db 后可以接字符串, 会自动查询字符集存入对应的字节;</p>
-<h2 id="RESB"><a href="#RESB" class="headerlink" title="RESB"></a>RESB</h2><p>resb是”reserve byte”的缩写,     </p>
-<p>如果想在地址中空出10个字节, 可以写</p>
-<p>RESB 10;</p>
-<p>这样就会写入10个为0的字节</p>
-<p>RESB 0x1fe-$</p>
-<p>这里的$值当前代码行的的字节数,</p>
-<p>在执行中, resb会先用0x1fe减去当前代码行数, 然后继续写入空字节</p>
-<h2 id="DW"><a href="#DW" class="headerlink" title="DW"></a>DW</h2><p>dw是”data word”的缩写, 在计算机中 word一般值十六位的意思,</p>
-<p>即写入16字节的数据</p>
-<p>使用同DB</p>
-<h2 id="DD"><a href="#DD" class="headerlink" title="DD"></a>DD</h2><p>dw是”data dounle-word”的缩写</p>
-<p>即写入32字节的数据</p>
-<p>使用同DB</p>
-<h2 id="MOV"><a href="#MOV" class="headerlink" title="MOV"></a>MOV</h2><p>mov是”move”的缩写, 表示赋值\</p>
-<p>MOV AX,0 表示AX=0</p>
-<h2 id="ADD"><a href="#ADD" class="headerlink" title="ADD"></a>ADD</h2><p>add 是加法指令,</p>
-<p>add SI,1 等于”SI=SI+1”</p>
-<h2 id="CMP"><a href="#CMP" class="headerlink" title="CMP"></a>CMP</h2><p>cmp 是比较指令</p>
-<p>cmp AL,3 表示将AL中的值取出来与3做比较</p>
-<h2 id="JE"><a href="#JE" class="headerlink" title="JE"></a>JE</h2><p>je是”jump if equal”的缩写</p>
-<p>je是条件跳转语句. 如下</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">CMP AL,0</span><br><span class="line"></span><br><span class="line">JE fin</span><br></pre></td></tr></table></figure>
-
-<p>相当于c语言的</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> ( AL == <span class="number">0</span> )</span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">goto</span> fin;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="INT"><a href="#INT" class="headerlink" title="INT"></a>INT</h2><p>int是”interrupt”的缩写, 表示中断的意思</p>
-<h2 id="HLT"><a href="#HLT" class="headerlink" title="HLT"></a>HLT</h2><p>hlt是”halt”的缩写, 表示停止</p>
-<p>让cpu进入休眠状态, 受到外部输入后重新激活</p>
-<h2 id="JC"><a href="#JC" class="headerlink" title="JC"></a>JC</h2><p>jc是”jump if carry”的缩写, 表示如果进位标识位是1时就跳转</p>
-]]></content>
-      <categories>
-        <category>汇编</category>
-      </categories>
-      <tags>
-        <tag>汇编</tag>
       </tags>
   </entry>
   <entry>
@@ -375,39 +345,87 @@
       </tags>
   </entry>
   <entry>
-    <title>谷粒学院踩坑</title>
-    <url>/2022/01/20/%E8%B0%B7%E7%B2%92%E5%AD%A6%E9%99%A2%E8%B8%A9%E5%9D%91/</url>
-    <content><![CDATA[<h3 id="踩坑"><a href="#踩坑" class="headerlink" title="踩坑"></a>踩坑</h3><h4 id="配置一样，配置中心发布的配置无法正确更新读取？"><a href="#配置一样，配置中心发布的配置无法正确更新读取？" class="headerlink" title="配置一样，配置中心发布的配置无法正确更新读取？"></a>配置一样，配置中心发布的配置无法正确更新读取？</h4><p><strong>检查项目版本</strong></p>
-<p>在common项目中的pom.xml中，version改成2.1.0..1.0.RELEASE</p>
-<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependencyManagement</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.alibaba.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-alibaba-dependencies<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.1.0.RELEASE<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">type</span>&gt;</span>pom<span class="tag">&lt;/<span class="name">type</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">scope</span>&gt;</span>import<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependencyManagement</span>&gt;</span></span><br></pre></td></tr></table></figure>
+    <title>汇编指令</title>
+    <url>/2021/05/17/%E6%B1%87%E7%BC%96%E6%8C%87%E4%BB%A4/</url>
+    <content><![CDATA[<h2 id="寄存器"><a href="#寄存器" class="headerlink" title="寄存器"></a>寄存器</h2><h3 id="16位寄存器"><a href="#16位寄存器" class="headerlink" title="16位寄存器"></a>16位寄存器</h3><ul>
+<li>AX: accumulator, 累加寄存器</li>
+<li>CX: counter, 计数寄存器</li>
+<li>DX: data, 数据寄存器</li>
+<li>BX: base, 基址寄存器</li>
+<li>SP: stack pointer, 栈指针寄存器</li>
+<li>BP: base pointer, 基址指针寄存器</li>
+<li>SI: source index, 源变址寄存器</li>
+<li>DI: destination index, 目的变址寄存器</li>
+</ul>
+<h3 id="8位寄存器"><a href="#8位寄存器" class="headerlink" title="8位寄存器"></a>8位寄存器</h3><ul>
+<li><p>AL: 累加寄存器低位</p>
+</li>
+<li><p>CL: 计数寄存器低位</p>
+</li>
+<li><p>DL: 数据寄存器低位</p>
+</li>
+<li><p>BL: 基址寄存器低位</p>
+</li>
+<li><p>AH: 累加寄存器高位</p>
+</li>
+<li><p>CH: 计数寄存器高位</p>
+</li>
+<li><p>DH: 数据寄存器高位</p>
+</li>
+<li><p>BH: 基址寄存器高位</p>
+</li>
+</ul>
+<h3 id="32位寄存器"><a href="#32位寄存器" class="headerlink" title="32位寄存器"></a>32位寄存器</h3><p>EAX, ECX, EDX, EBX, ESP, EBP, ESI, EDI</p>
+<p>在16位寄存器的指令前加E即可表示32位寄存器, 这个字母E来源于英文单词 “Extend”;</p>
+<p>虽说EAX是一个32位寄存器, 但是他的高位即没有名字也没有编号, , 也就是说, 虽然我们可以吧EAX作为两个16位寄存器使用, 但只有低十六位用起来方便, 如果我们需要使用高16位时, 需要将高十六位移位至低十六;</p>
+<h3 id="段寄存器"><a href="#段寄存器" class="headerlink" title="段寄存器"></a>段寄存器</h3><ul>
+<li>ES: 附加段寄存器 ( extra segment )</li>
+<li>CS: 代码段寄存器 ( code segment )</li>
+<li>SS: 栈段寄存器 ( stack segment )</li>
+<li>DS: 数据段寄存器 ( data segment )</li>
+<li>FS: 附加段寄存器 ( extra segment )</li>
+<li>GS: 附加段寄存器 ( extra segment )</li>
+</ul>
+<h2 id="DB"><a href="#DB" class="headerlink" title="DB"></a>DB</h2><p>db是”data byte”的缩写, 指向文件中写入一个字节</p>
+<p>db a, b, c;</p>
+<p>写入a, b, c至文件</p>
+<p>db 后可以接字符串, 会自动查询字符集存入对应的字节;</p>
+<h2 id="RESB"><a href="#RESB" class="headerlink" title="RESB"></a>RESB</h2><p>resb是”reserve byte”的缩写,     </p>
+<p>如果想在地址中空出10个字节, 可以写</p>
+<p>RESB 10;</p>
+<p>这样就会写入10个为0的字节</p>
+<p>RESB 0x1fe-$</p>
+<p>这里的$值当前代码行的的字节数,</p>
+<p>在执行中, resb会先用0x1fe减去当前代码行数, 然后继续写入空字节</p>
+<h2 id="DW"><a href="#DW" class="headerlink" title="DW"></a>DW</h2><p>dw是”data word”的缩写, 在计算机中 word一般值十六位的意思,</p>
+<p>即写入16字节的数据</p>
+<p>使用同DB</p>
+<h2 id="DD"><a href="#DD" class="headerlink" title="DD"></a>DD</h2><p>dw是”data dounle-word”的缩写</p>
+<p>即写入32字节的数据</p>
+<p>使用同DB</p>
+<h2 id="MOV"><a href="#MOV" class="headerlink" title="MOV"></a>MOV</h2><p>mov是”move”的缩写, 表示赋值\</p>
+<p>MOV AX,0 表示AX=0</p>
+<h2 id="ADD"><a href="#ADD" class="headerlink" title="ADD"></a>ADD</h2><p>add 是加法指令,</p>
+<p>add SI,1 等于”SI=SI+1”</p>
+<h2 id="CMP"><a href="#CMP" class="headerlink" title="CMP"></a>CMP</h2><p>cmp 是比较指令</p>
+<p>cmp AL,3 表示将AL中的值取出来与3做比较</p>
+<h2 id="JE"><a href="#JE" class="headerlink" title="JE"></a>JE</h2><p>je是”jump if equal”的缩写</p>
+<p>je是条件跳转语句. 如下</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">CMP AL,0</span><br><span class="line"></span><br><span class="line">JE fin</span><br></pre></td></tr></table></figure>
 
-<p>在其他项目中的pom.xml文件，spring-cloud.version的值，也就是springcloud的版本应改为Greenwich.SR3</p>
-<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">properties</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--    其他变量...   --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">spring-cloud.version</span>&gt;</span>Greenwich.SR3<span class="tag">&lt;/<span class="name">spring-cloud.version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">properties</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>相当于c语言的</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> ( AL == <span class="number">0</span> )</span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">goto</span> fin;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>控制台输出以下就成功解决</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Located property source: CompositePropertySource &#123;name=<span class="string">&#x27;NACOS&#x27;</span>, propertySources=[NacosPropertySource &#123;name=<span class="string">&#x27;gulimall-coupon.properties&#x27;</span>&#125;]&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="千万注意application-yml中的缩进"><a href="#千万注意application-yml中的缩进" class="headerlink" title="千万注意application.yml中的缩进"></a>千万注意application.yml中的缩进</h4><p>坑死了，不小心多按了一个tab，检查了一个多小时，记录一下</p>
-<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">cloud:</span></span><br><span class="line">      <span class="attr">gateway:</span></span><br><span class="line">        <span class="attr">routes:</span></span><br><span class="line">          <span class="bullet">-</span> <span class="attr">id:</span> <span class="string">query_route</span> <span class="comment"># 规则id</span></span><br><span class="line">            <span class="attr">uri:</span> <span class="string">https://baidu.com</span> <span class="comment"># 目的地址</span></span><br><span class="line">            <span class="attr">predicates:</span></span><br><span class="line">              <span class="bullet">-</span> <span class="string">Query=url,</span> <span class="string">baidu</span> <span class="comment"># 断言匹配，满足就跳转到目的地址</span></span><br><span class="line">          <span class="bullet">-</span> <span class="attr">id:</span> <span class="string">qq_test</span></span><br><span class="line">            <span class="attr">uri:</span> <span class="string">https://qq.com</span></span><br><span class="line">            <span class="attr">predicates:</span></span><br><span class="line">              <span class="bullet">-</span> <span class="string">Query=url,</span> <span class="string">qq</span></span><br><span class="line">          <span class="bullet">-</span> <span class="attr">id:</span> <span class="string">admin_route</span></span><br><span class="line">            <span class="attr">uri:</span> <span class="string">lb://renren-fast</span></span><br><span class="line">            <span class="attr">predicates:</span></span><br><span class="line">              <span class="bullet">-</span> <span class="string">Path=/api/**</span></span><br><span class="line">            <span class="attr">filters:</span></span><br><span class="line">              <span class="bullet">-</span> <span class="string">RewritePath=/api/(?&lt;segment&gt;.*),/renren-fast/$\&#123;segment&#125;</span></span><br></pre></td></tr></table></figure>
-
-<p>可以看见cloud和gateway之间多按了一个<strong>tab</strong>导致启动时，既不报错，也不提示，最后运行时始终无法排除问题，mark一下。</p>
-<h4 id="在p62中OSS存在依赖问题"><a href="#在p62中OSS存在依赖问题" class="headerlink" title="在p62中OSS存在依赖问题"></a>在p62中OSS存在依赖问题</h4><p>报错如下：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Caused by: java.lang.NoSuchMethodError: com.aliyuncs.profile.DefaultProfile.getHttpClientConfig()Lcom/aliyuncs/http/HttpClientConfig;</span><br><span class="line">	at com.alibaba.cloud.context.AliCloudSdk.&lt;init&gt;(AliCloudSdk.java:<span class="number">76</span>)</span><br><span class="line">	at com.alibaba.cloud.context.edas.AliCloudEdasSdkFactory.getDefaultAliCloudEdasSdk(AliCloudEdasSdkFactory.java:<span class="number">34</span>)</span><br><span class="line">	at com.alibaba.cloud.spring.boot.context.autoconfigure.EdasContextAutoConfiguration.aliCloudEdasSdk(EdasContextAutoConfiguration.java:<span class="number">42</span>)</span><br><span class="line">	at com.alibaba.cloud.spring.boot.context.autoconfigure.EdasContextAutoConfiguration$$EnhancerBySpringCGLIB$$41856d21.CGLIB$aliCloudEdasSdk$<span class="number">0</span>(&lt;generated&gt;)</span><br><span class="line">	at com.alibaba.cloud.spring.boot.context.autoconfigure.EdasContextAutoConfiguration$$EnhancerBySpringCGLIB$$41856d21$$FastClassBySpringCGLIB$$ac01ea4e.invoke(&lt;generated&gt;)</span><br><span class="line">	at org.springframework.cglib.proxy.MethodProxy.invokeSuper(MethodProxy.java:<span class="number">244</span>)</span><br><span class="line">	at org.springframework.context.annotation.ConfigurationClassEnhancer$BeanMethodInterceptor.intercept(ConfigurationClassEnhancer.java:<span class="number">363</span>)</span><br><span class="line">	at com.alibaba.cloud.spring.boot.context.autoconfigure.EdasContextAutoConfiguration$$EnhancerBySpringCGLIB$$41856d21.aliCloudEdasSdk(&lt;generated&gt;)</span><br><span class="line">	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)</span><br><span class="line">	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:<span class="number">62</span>)</span><br><span class="line">	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:<span class="number">43</span>)</span><br><span class="line">	at java.base/java.lang.reflect.Method.invoke(Method.java:<span class="number">566</span>)</span><br><span class="line">	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiate(SimpleInstantiationStrategy.java:<span class="number">154</span>)</span><br><span class="line">	... <span class="number">43</span> more</span><br></pre></td></tr></table></figure>
-
-<p>此问题是由于版本依赖问题导致</p>
-<p>修改gulimall-common模块下的pom依赖</p>
-<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.alibaba.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>aliyun-oss-spring-boot-starter<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.0.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">          <span class="comment">&lt;!-- 此处排除该依赖，包默认依赖版本过低，会导致查找不到方法，引入版本为4.4.x版本 --&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">exclusions</span>&gt;</span></span><br><span class="line">              <span class="tag">&lt;<span class="name">exclusion</span>&gt;</span></span><br><span class="line">                  <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.aliyun<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">                  <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>aliyun-java-sdk-core<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">              <span class="tag">&lt;/<span class="name">exclusion</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;/<span class="name">exclusions</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 引入4.5.x版本依赖 --&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.aliyun<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>aliyun-java-sdk-core<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">version</span>&gt;</span>4.5.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-
-
+<h2 id="INT"><a href="#INT" class="headerlink" title="INT"></a>INT</h2><p>int是”interrupt”的缩写, 表示中断的意思</p>
+<h2 id="HLT"><a href="#HLT" class="headerlink" title="HLT"></a>HLT</h2><p>hlt是”halt”的缩写, 表示停止</p>
+<p>让cpu进入休眠状态, 受到外部输入后重新激活</p>
+<h2 id="JC"><a href="#JC" class="headerlink" title="JC"></a>JC</h2><p>jc是”jump if carry”的缩写, 表示如果进位标识位是1时就跳转</p>
 ]]></content>
       <categories>
-        <category>谷粒学院</category>
+        <category>汇编</category>
       </categories>
       <tags>
-        <tag>springboot</tag>
-        <tag>springcloud</tag>
-        <tag>nacos</tag>
+        <tag>汇编</tag>
       </tags>
   </entry>
   <entry>
@@ -457,6 +475,56 @@
       </categories>
       <tags>
         <tag>生活</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>谷粒学院踩坑</title>
+    <url>/2022/01/20/%E8%B0%B7%E7%B2%92%E5%AD%A6%E9%99%A2%E8%B8%A9%E5%9D%91/</url>
+    <content><![CDATA[<h3 id="踩坑"><a href="#踩坑" class="headerlink" title="踩坑"></a>踩坑</h3><h4 id="配置一样，配置中心发布的配置无法正确更新读取？"><a href="#配置一样，配置中心发布的配置无法正确更新读取？" class="headerlink" title="配置一样，配置中心发布的配置无法正确更新读取？"></a>配置一样，配置中心发布的配置无法正确更新读取？</h4><p><strong>检查项目版本</strong></p>
+<p>在common项目中的pom.xml中，version改成2.1.0..1.0.RELEASE</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependencyManagement</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.alibaba.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-alibaba-dependencies<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.1.0.RELEASE<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">type</span>&gt;</span>pom<span class="tag">&lt;/<span class="name">type</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">scope</span>&gt;</span>import<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependencyManagement</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>在其他项目中的pom.xml文件，spring-cloud.version的值，也就是springcloud的版本应改为Greenwich.SR3</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">properties</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--    其他变量...   --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">spring-cloud.version</span>&gt;</span>Greenwich.SR3<span class="tag">&lt;/<span class="name">spring-cloud.version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">properties</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>控制台输出以下就成功解决</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Located property source: CompositePropertySource &#123;name=<span class="string">&#x27;NACOS&#x27;</span>, propertySources=[NacosPropertySource &#123;name=<span class="string">&#x27;gulimall-coupon.properties&#x27;</span>&#125;]&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="千万注意application-yml中的缩进"><a href="#千万注意application-yml中的缩进" class="headerlink" title="千万注意application.yml中的缩进"></a>千万注意application.yml中的缩进</h4><p>坑死了，不小心多按了一个tab，检查了一个多小时，记录一下</p>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">cloud:</span></span><br><span class="line">      <span class="attr">gateway:</span></span><br><span class="line">        <span class="attr">routes:</span></span><br><span class="line">          <span class="bullet">-</span> <span class="attr">id:</span> <span class="string">query_route</span> <span class="comment"># 规则id</span></span><br><span class="line">            <span class="attr">uri:</span> <span class="string">https://baidu.com</span> <span class="comment"># 目的地址</span></span><br><span class="line">            <span class="attr">predicates:</span></span><br><span class="line">              <span class="bullet">-</span> <span class="string">Query=url,</span> <span class="string">baidu</span> <span class="comment"># 断言匹配，满足就跳转到目的地址</span></span><br><span class="line">          <span class="bullet">-</span> <span class="attr">id:</span> <span class="string">qq_test</span></span><br><span class="line">            <span class="attr">uri:</span> <span class="string">https://qq.com</span></span><br><span class="line">            <span class="attr">predicates:</span></span><br><span class="line">              <span class="bullet">-</span> <span class="string">Query=url,</span> <span class="string">qq</span></span><br><span class="line">          <span class="bullet">-</span> <span class="attr">id:</span> <span class="string">admin_route</span></span><br><span class="line">            <span class="attr">uri:</span> <span class="string">lb://renren-fast</span></span><br><span class="line">            <span class="attr">predicates:</span></span><br><span class="line">              <span class="bullet">-</span> <span class="string">Path=/api/**</span></span><br><span class="line">            <span class="attr">filters:</span></span><br><span class="line">              <span class="bullet">-</span> <span class="string">RewritePath=/api/(?&lt;segment&gt;.*),/renren-fast/$\&#123;segment&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>可以看见cloud和gateway之间多按了一个<strong>tab</strong>导致启动时，既不报错，也不提示，最后运行时始终无法排除问题，mark一下。</p>
+<h4 id="在p62中OSS存在依赖问题"><a href="#在p62中OSS存在依赖问题" class="headerlink" title="在p62中OSS存在依赖问题"></a>在p62中OSS存在依赖问题</h4><p>报错如下：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Caused by: java.lang.NoSuchMethodError: com.aliyuncs.profile.DefaultProfile.getHttpClientConfig()Lcom/aliyuncs/http/HttpClientConfig;</span><br><span class="line">	at com.alibaba.cloud.context.AliCloudSdk.&lt;init&gt;(AliCloudSdk.java:<span class="number">76</span>)</span><br><span class="line">	at com.alibaba.cloud.context.edas.AliCloudEdasSdkFactory.getDefaultAliCloudEdasSdk(AliCloudEdasSdkFactory.java:<span class="number">34</span>)</span><br><span class="line">	at com.alibaba.cloud.spring.boot.context.autoconfigure.EdasContextAutoConfiguration.aliCloudEdasSdk(EdasContextAutoConfiguration.java:<span class="number">42</span>)</span><br><span class="line">	at com.alibaba.cloud.spring.boot.context.autoconfigure.EdasContextAutoConfiguration$$EnhancerBySpringCGLIB$$41856d21.CGLIB$aliCloudEdasSdk$<span class="number">0</span>(&lt;generated&gt;)</span><br><span class="line">	at com.alibaba.cloud.spring.boot.context.autoconfigure.EdasContextAutoConfiguration$$EnhancerBySpringCGLIB$$41856d21$$FastClassBySpringCGLIB$$ac01ea4e.invoke(&lt;generated&gt;)</span><br><span class="line">	at org.springframework.cglib.proxy.MethodProxy.invokeSuper(MethodProxy.java:<span class="number">244</span>)</span><br><span class="line">	at org.springframework.context.annotation.ConfigurationClassEnhancer$BeanMethodInterceptor.intercept(ConfigurationClassEnhancer.java:<span class="number">363</span>)</span><br><span class="line">	at com.alibaba.cloud.spring.boot.context.autoconfigure.EdasContextAutoConfiguration$$EnhancerBySpringCGLIB$$41856d21.aliCloudEdasSdk(&lt;generated&gt;)</span><br><span class="line">	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)</span><br><span class="line">	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:<span class="number">62</span>)</span><br><span class="line">	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:<span class="number">43</span>)</span><br><span class="line">	at java.base/java.lang.reflect.Method.invoke(Method.java:<span class="number">566</span>)</span><br><span class="line">	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiate(SimpleInstantiationStrategy.java:<span class="number">154</span>)</span><br><span class="line">	... <span class="number">43</span> more</span><br></pre></td></tr></table></figure>
+
+<p>此问题是由于版本依赖问题导致</p>
+<p>修改gulimall-common模块下的pom依赖</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.alibaba.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>aliyun-oss-spring-boot-starter<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.0.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">          <span class="comment">&lt;!-- 此处排除该依赖，包默认依赖版本过低，会导致查找不到方法，引入版本为4.4.x版本 --&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">exclusions</span>&gt;</span></span><br><span class="line">              <span class="tag">&lt;<span class="name">exclusion</span>&gt;</span></span><br><span class="line">                  <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.aliyun<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">                  <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>aliyun-java-sdk-core<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">              <span class="tag">&lt;/<span class="name">exclusion</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;/<span class="name">exclusions</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 引入4.5.x版本依赖 --&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.aliyun<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>aliyun-java-sdk-core<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">version</span>&gt;</span>4.5.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="MySql连接存在问题"><a href="#MySql连接存在问题" class="headerlink" title="MySql连接存在问题"></a>MySql连接存在问题</h4><p>在写代码过程中，发现mysql连接非常慢，在修改连接池无果后上网搜索，可能是由于mysql主机的dns存在问题，尝试配置以下内容，情况待定…</p>
+<figure class="highlight ini"><table><tr><td class="code"><pre><span class="line"><span class="section">[mysqld]</span></span><br><span class="line">skip-name-resolve</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>补充：</p>
+<p>尝试增加mysql最大连接树解决问题</p>
+<p>通过sql查询当前最大连接数</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">show</span> variables <span class="keyword">like</span> <span class="string">&#x27;max_connections&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>临时修改最大连接数，mysql重启后失效</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">set</span> <span class="keyword">global</span> max_connections<span class="operator">=</span><span class="number">1000</span>;</span><br></pre></td></tr></table></figure>
+
+<p>永久修改连接数，在my.cnf文件中写入</p>
+<figure class="highlight ini"><table><tr><td class="code"><pre><span class="line"><span class="section">[mysqld]</span></span><br><span class="line"><span class="attr">max_connections</span>=<span class="number">1000</span></span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>谷粒学院</category>
+      </categories>
+      <tags>
+        <tag>springboot</tag>
+        <tag>springcloud</tag>
+        <tag>nacos</tag>
       </tags>
   </entry>
 </search>
