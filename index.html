@@ -186,6 +186,95 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/04/28/Tomcat%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E2%80%94%E2%80%94%E2%80%94%E2%80%94Tomcat%E7%B1%BB%E5%8A%A0%E8%BD%BD/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="布布子">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="iBubuzi">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/04/28/Tomcat%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E2%80%94%E2%80%94%E2%80%94%E2%80%94Tomcat%E7%B1%BB%E5%8A%A0%E8%BD%BD/" class="post-title-link" itemprop="url">Tomcat源码分析————Tomcat类加载</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-04-28 21:32:21 / 修改时间：22:35:20" itemprop="dateCreated datePublished" datetime="2022-04-28T21:32:21+08:00">2022-04-28</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" itemprop="url" rel="index"><span itemprop="name">源码分析</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>3.3k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>3 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>关于tomcat中类加载器相关源码分析</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/04/28/Tomcat%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E2%80%94%E2%80%94%E2%80%94%E2%80%94Tomcat%E7%B1%BB%E5%8A%A0%E8%BD%BD/">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/01/26/spring%E9%A1%B9%E7%9B%AE%E4%B8%AD%E4%BD%BF%E7%94%A8%E7%BB%9F%E4%B8%80%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -288,8 +377,17 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-01-27 13:03:42" itemprop="dateModified" datetime="2022-01-27T13:03:42+08:00">2022-01-27</time>
+                <time title="修改时间：2022-02-20 13:51:53" itemprop="dateModified" datetime="2022-02-20T13:51:53+08:00">2022-02-20</time>
               </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Spring/" itemprop="url" rel="index"><span itemprop="name">Spring</span></a>
+                </span>
+            </span>
 
           <br>
             <span class="post-meta-item" title="本文字数">
@@ -316,15 +414,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="解决Spring项目中后端表单数据验证功能"><a href="#解决Spring项目中后端表单数据验证功能" class="headerlink" title="解决Spring项目中后端表单数据验证功能"></a>解决Spring项目中后端表单数据验证功能</h1><h2 id="JSR303"><a href="#JSR303" class="headerlink" title="JSR303"></a>JSR303</h2><p>采用JSR303库中提供的效验注解</p>
-<p><img src="https://s2.loli.net/2022/01/25/w8LXS4QV91JGPOa.png" alt="image-20220125232949284"></p>
-<h3 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h3><h4 id="在bean的字段添加对应的校验注解-Valid"><a href="#在bean的字段添加对应的校验注解-Valid" class="headerlink" title="在bean的字段添加对应的校验注解(@Valid)"></a>在bean的字段添加对应的校验注解(@Valid)</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RequestMapping(&quot;/save&quot;)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> R <span class="title">save</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="meta">@Valid</span> // 添加注解确定该对象需要校验</span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="meta">@RequestBody</span> BrandEntity brand)</span></span>&#123;</span><br><span class="line">        brandService.save(brand);</span><br><span class="line">        <span class="keyword">return</span> R.ok();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="返回数据"><a href="#返回数据" class="headerlink" title="返回数据"></a>返回数据</h3><p>当再次进行非法请求时就会返回如下</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">	<span class="attr">&quot;timestamp&quot;</span>: <span class="string">&quot;2022-01-25T15:36:50.377+0000&quot;</span>,</span><br><span class="line">	<span class="attr">&quot;status&quot;</span>: <span class="number">400</span>,</span><br><span class="line">	<span class="attr">&quot;error&quot;</span>: <span class="string">&quot;Bad Request&quot;</span>,</span><br><span class="line">	<span class="attr">&quot;errors&quot;</span>: [</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="attr">&quot;codes&quot;</span>: [</span><br><span class="line">				<span class="string">&quot;NotBlank.brandEntity.name&quot;</span>,</span><br><span class="line">				<span class="string">&quot;NotBlank.name&quot;</span>,</span><br><span class="line">				<span class="string">&quot;NotBlank.java.lang.String&quot;</span>,</span><br><span class="line">				<span class="string">&quot;NotBlank&quot;</span></span><br><span class="line">			],</span><br><span class="line">			<span class="attr">&quot;arguments&quot;</span>: [</span><br><span class="line">				&#123;</span><br><span class="line">					<span class="attr">&quot;codes&quot;</span>: [</span><br><span class="line">						<span class="string">&quot;brandEntity.name&quot;</span>,</span><br><span class="line">						<span class="string">&quot;name&quot;</span></span><br><span class="line">					],</span><br><span class="line">					<span class="attr">&quot;arguments&quot;</span>: <span class="literal">null</span>,</span><br><span class="line">					<span class="attr">&quot;defaultMessage&quot;</span>: <span class="string">&quot;name&quot;</span>,</span><br><span class="line">					<span class="attr">&quot;code&quot;</span>: <span class="string">&quot;name&quot;</span></span><br><span class="line">				&#125;</span><br><span class="line">			],</span><br><span class="line">			<span class="attr">&quot;defaultMessage&quot;</span>: <span class="string">&quot;不能为空&quot;</span>,</span><br><span class="line">			<span class="attr">&quot;objectName&quot;</span>: <span class="string">&quot;brandEntity&quot;</span>,</span><br><span class="line">			<span class="attr">&quot;field&quot;</span>: <span class="string">&quot;name&quot;</span>,</span><br><span class="line">			<span class="attr">&quot;rejectedValue&quot;</span>: <span class="string">&quot;&quot;</span>,</span><br><span class="line">			<span class="attr">&quot;bindingFailure&quot;</span>: <span class="literal">false</span>,</span><br><span class="line">			<span class="attr">&quot;code&quot;</span>: <span class="string">&quot;NotBlank&quot;</span></span><br><span class="line">		&#125;</span><br><span class="line">	],</span><br><span class="line">	<span class="attr">&quot;message&quot;</span>: <span class="string">&quot;Validation failed for object=&#x27;brandEntity&#x27;. Error count: 1&quot;</span>,</span><br><span class="line">	<span class="attr">&quot;path&quot;</span>: <span class="string">&quot;/product/brand/save&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+          <p>解决Spring项目中后端表单数据验证功能</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2022/01/25/spring%E9%A1%B9%E7%9B%AE%E4%B8%AD%E7%9A%84%E5%90%8E%E7%AB%AF%E8%A1%A8%E5%8D%95%E9%AA%8C%E8%AF%81/#more" rel="contents">
+              <a class="btn" href="/2022/01/25/spring%E9%A1%B9%E7%9B%AE%E4%B8%AD%E7%9A%84%E5%90%8E%E7%AB%AF%E8%A1%A8%E5%8D%95%E9%AA%8C%E8%AF%81/">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -1000,101 +1093,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/22/docker%E5%91%BD%E4%BB%A4%E5%85%A8%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="布布子">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="iBubuzi">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/04/22/docker%E5%91%BD%E4%BB%A4%E5%85%A8%E8%A7%A3/" class="post-title-link" itemprop="url">docker命令全解</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-04-22 20:34:58" itemprop="dateCreated datePublished" datetime="2021-04-22T20:34:58+08:00">2021-04-22</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-01-25 15:35:47" itemprop="dateModified" datetime="2022-01-25T15:35:47+08:00">2022-01-25</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Docker/" itemprop="url" rel="index"><span itemprop="name">Docker</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>194</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>docker全命令详解</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/04/22/docker%E5%91%BD%E4%BB%A4%E5%85%A8%E8%A7%A3/">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1166,20 +1164,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">13</span>
+          <span class="site-state-item-count">14</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-count">10</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-count">15</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -1223,12 +1221,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">27k</span>
+    <span title="站点总字数">30k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">25 分钟</span>
+    <span title="站点阅读时长">28 分钟</span>
 </div>
 
         
