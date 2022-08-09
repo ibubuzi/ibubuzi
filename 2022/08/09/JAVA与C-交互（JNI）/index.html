@@ -22,12 +22,12 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="JNI编写Java类1234567891011package cn.hnzdf.brakePlatform.maven;public class TestMain&amp;#123;    public native void testHello();    public static void main(String[] args)&amp;#123;        System.loadLibrary(&amp;qu">
+  <meta name="description" content="JAVA程序调用C++程序的方法">
 <meta property="og:type" content="article">
-<meta property="og:title" content="iBubuzi">
-<meta property="og:url" content="http://example.com/2022/08/04/JAVA%E4%B8%8EC++%E4%BA%A4%E4%BA%92%EF%BC%88JNI%EF%BC%89/index.html">
+<meta property="og:title" content="JAVA与C++交互（JNI）">
+<meta property="og:url" content="http://example.com/2022/08/09/JAVA%E4%B8%8EC-%E4%BA%A4%E4%BA%92%EF%BC%88JNI%EF%BC%89/index.html">
 <meta property="og:site_name" content="iBubuzi">
-<meta property="og:description" content="JNI编写Java类1234567891011package cn.hnzdf.brakePlatform.maven;public class TestMain&amp;#123;    public native void testHello();    public static void main(String[] args)&amp;#123;        System.loadLibrary(&amp;qu">
+<meta property="og:description" content="JAVA程序调用C++程序的方法">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://s2.loli.net/2022/08/04/Rvktb6VOfhQX5Gs.png">
 <meta property="og:image" content="https://s2.loli.net/2022/08/04/2ShEdx7agArjz3P.png">
@@ -39,13 +39,16 @@
 <meta property="og:image" content="https://s2.loli.net/2022/08/04/xPkWGhNKeByvAY1.png">
 <meta property="og:image" content="https://s2.loli.net/2022/08/04/jrNiKs8cWR4SmOA.png">
 <meta property="og:image" content="https://s2.loli.net/2022/08/04/qs31PELmkaplTUi.png">
-<meta property="article:published_time" content="2022-08-04T06:49:15.223Z">
-<meta property="article:modified_time" content="2022-08-04T07:02:52.299Z">
+<meta property="article:published_time" content="2022-08-09T02:03:44.000Z">
+<meta property="article:modified_time" content="2022-08-09T02:06:28.571Z">
 <meta property="article:author" content="布布子">
+<meta property="article:tag" content="JNI">
+<meta property="article:tag" content="JAVA">
+<meta property="article:tag" content="C++">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://s2.loli.net/2022/08/04/Rvktb6VOfhQX5Gs.png">
 
-<link rel="canonical" href="http://example.com/2022/08/04/JAVA%E4%B8%8EC++%E4%BA%A4%E4%BA%92%EF%BC%88JNI%EF%BC%89/">
+<link rel="canonical" href="http://example.com/2022/08/09/JAVA%E4%B8%8EC-%E4%BA%A4%E4%BA%92%EF%BC%88JNI%EF%BC%89/">
 
 
 <script id="page-configurations">
@@ -58,7 +61,7 @@
   };
 </script>
 
-  <title> | iBubuzi</title>
+  <title>JAVA与C++交互（JNI） | iBubuzi</title>
   
 
 
@@ -202,7 +205,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/08/04/JAVA%E4%B8%8EC++%E4%BA%A4%E4%BA%92%EF%BC%88JNI%EF%BC%89/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/08/09/JAVA%E4%B8%8EC-%E4%BA%A4%E4%BA%92%EF%BC%88JNI%EF%BC%89/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -215,7 +218,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          
+          JAVA与C++交互（JNI）
         </h1>
 
         <div class="post-meta">
@@ -226,7 +229,16 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2022-08-04 14:49:15 / 修改时间：15:02:52" itemprop="dateCreated datePublished" datetime="2022-08-04T14:49:15+08:00">2022-08-04</time>
+              <time title="创建时间：2022-08-09 10:03:44 / 修改时间：10:06:28" itemprop="dateCreated datePublished" datetime="2022-08-09T10:03:44+08:00">2022-08-09</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JNI/" itemprop="url" rel="index"><span itemprop="name">JNI</span></a>
+                </span>
             </span>
 
           
@@ -251,6 +263,7 @@
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
               <span>1 分钟</span>
             </span>
+            <div class="post-description">JAVA程序调用C++程序的方法</div>
 
         </div>
       </header>
@@ -323,6 +336,11 @@
 
 
       <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/JNI/" rel="tag"># JNI</a>
+              <a href="/tags/JAVA/" rel="tag"># JAVA</a>
+              <a href="/tags/C/" rel="tag"># C++</a>
+          </div>
 
         
 
@@ -330,13 +348,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2022/07/21/%E8%B7%A8%E8%AF%AD%E8%A8%80%E8%B7%A8%E5%B9%B3%E5%8F%B0RPC/" rel="prev" title="">
-      <i class="fa fa-chevron-left"></i> 
+    <a href="/2022/08/09/JAR%E5%8C%85%E5%8A%A0%E5%AF%86class%E6%96%87%E4%BB%B6%E9%98%B2%E6%AD%A2%E5%8F%8D%E7%BC%96%E8%AF%91/" rel="prev" title="JAR包加密class文件防止反编译">
+      <i class="fa fa-chevron-left"></i> JAR包加密class文件防止反编译
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2022/08/09/JAR%E5%8C%85%E5%8A%A0%E5%AF%86class%E6%96%87%E4%BB%B6%E9%98%B2%E6%AD%A2%E5%8F%8D%E7%BC%96%E8%AF%91/" rel="next" title="JAR包加密class文件防止反编译">
-      JAR包加密class文件防止反编译 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -412,20 +427,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">18</span>
+          <span class="site-state-item-count">17</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-count">12</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">17</span>
+        <span class="site-state-item-count">22</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -565,7 +580,7 @@ NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
       repo        : 'ibubuzi.github.io',
       owner       : 'ibubuzi',
       admin       : ['ibubuzi'],
-      id          : '01ddd4f5ff52a0854698eb09262e9521',
+      id          : '16c8c111456e2a76261ff3825257bf17',
         language: 'zh-CN',
       distractionFreeMode: true
     });

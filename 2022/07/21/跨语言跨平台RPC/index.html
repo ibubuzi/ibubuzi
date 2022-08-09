@@ -22,19 +22,23 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="跨语言跨平台RPC框架本文使用apache-thrift:0.12.0版本 C# .net framework:4.6.1 jdk: 11 Java后台框架使用spring boot 准备下载必须**thrift**工具 C#安装包依赖">
+  <meta name="description" content="跨多语言rpc远程调用方法">
 <meta property="og:type" content="article">
-<meta property="og:title" content="iBubuzi">
+<meta property="og:title" content="跨语言跨平台RPC">
 <meta property="og:url" content="http://example.com/2022/07/21/%E8%B7%A8%E8%AF%AD%E8%A8%80%E8%B7%A8%E5%B9%B3%E5%8F%B0RPC/index.html">
 <meta property="og:site_name" content="iBubuzi">
-<meta property="og:description" content="跨语言跨平台RPC框架本文使用apache-thrift:0.12.0版本 C# .net framework:4.6.1 jdk: 11 Java后台框架使用spring boot 准备下载必须**thrift**工具 C#安装包依赖">
+<meta property="og:description" content="跨多语言rpc远程调用方法">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="c:/Users/bubuzi/AppData/Roaming/Typora/typora-user-images/image-20220721171654528.png">
-<meta property="article:published_time" content="2022-07-21T09:18:05.211Z">
-<meta property="article:modified_time" content="2022-07-21T09:35:02.483Z">
+<meta property="og:image" content="https://s2.loli.net/2022/08/09/p4BLTZYR97KOjwW.png">
+<meta property="article:published_time" content="2022-07-21T09:35:01.000Z">
+<meta property="article:modified_time" content="2022-08-09T02:09:18.628Z">
 <meta property="article:author" content="布布子">
+<meta property="article:tag" content="JAVA">
+<meta property="article:tag" content="RPC">
+<meta property="article:tag" content="C#">
+<meta property="article:tag" content="跨语言">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="c:/Users/bubuzi/AppData/Roaming/Typora/typora-user-images/image-20220721171654528.png">
+<meta name="twitter:image" content="https://s2.loli.net/2022/08/09/p4BLTZYR97KOjwW.png">
 
 <link rel="canonical" href="http://example.com/2022/07/21/%E8%B7%A8%E8%AF%AD%E8%A8%80%E8%B7%A8%E5%B9%B3%E5%8F%B0RPC/">
 
@@ -49,7 +53,7 @@
   };
 </script>
 
-  <title> | iBubuzi</title>
+  <title>跨语言跨平台RPC | iBubuzi</title>
   
 
 
@@ -206,7 +210,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          
+          跨语言跨平台RPC
         </h1>
 
         <div class="post-meta">
@@ -215,9 +219,24 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2022-07-21 17:18:05 / 修改时间：17:35:02" itemprop="dateCreated datePublished" datetime="2022-07-21T17:18:05+08:00">2022-07-21</time>
+              <time title="创建时间：2022-07-21 17:35:01" itemprop="dateCreated datePublished" datetime="2022-07-21T17:35:01+08:00">2022-07-21</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-08-09 10:09:18" itemprop="dateModified" datetime="2022-08-09T10:09:18+08:00">2022-08-09</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%B7%A8%E8%AF%AD%E8%A8%80/" itemprop="url" rel="index"><span itemprop="name">跨语言</span></a>
+                </span>
             </span>
 
           
@@ -242,6 +261,7 @@
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
               <span>2 分钟</span>
             </span>
+            <div class="post-description">跨多语言rpc远程调用方法</div>
 
         </div>
       </header>
@@ -258,7 +278,7 @@
 <p>Java后台框架使用spring boot</p>
 <h2 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h2><h3 id="下载必须"><a href="#下载必须" class="headerlink" title="下载必须"></a>下载必须</h3><p>**<a target="_blank" rel="noopener" href="https://archive.apache.org/dist/thrift/0.12.0/thrift-0.12.0.exe">thrift</a>**工具</p>
 <h3 id="C-安装包依赖"><a href="#C-安装包依赖" class="headerlink" title="C#安装包依赖"></a>C#安装包依赖</h3><p>使用NuGet包管理工具，下载安装对应的thrift的包</p>
-<p><img src="C:\Users\bubuzi\AppData\Roaming\Typora\typora-user-images\image-20220721171654528.png" alt="image-20220721171654528"></p>
+<p><img src="https://s2.loli.net/2022/08/09/p4BLTZYR97KOjwW.png" alt="image-20220721171654528"></p>
 <h3 id="java导入maven依赖"><a href="#java导入maven依赖" class="headerlink" title="java导入maven依赖"></a>java导入maven依赖</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"> <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.thrift<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>libthrift<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">version</span>&gt;</span>0.12.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
 
@@ -276,7 +296,6 @@
 
 
 <h3 id="JAVA-服务端"><a href="#JAVA-服务端" class="headerlink" title="JAVA 服务端"></a>JAVA 服务端</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 设置端口号和超时时间，创建Transport</span></span><br><span class="line">TServerSocket tServerSocket = <span class="keyword">new</span> TServerSocket(port,clientTimeout);</span><br><span class="line">TServer.Args tArgs = <span class="keyword">new</span> TServer.Args(tServerSocket);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 为Transport创建Protocol</span></span><br><span class="line"><span class="comment">// 注意，这里的TCompactProtocol和客户端应该保持一致</span></span><br><span class="line">tArgs.protocolFactory(<span class="keyword">new</span> TCompactProtocol.Factory());</span><br><span class="line"></span><br><span class="line"><span class="comment">// 为Protocol创建Processor</span></span><br><span class="line">TProcessor tprocessor = <span class="keyword">new</span> HelloService.Processor&lt;HelloService.Iface&gt;(<span class="keyword">new</span> HelloServiceHandler());</span><br><span class="line">tArgs.processor(tprocessor);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 创建Server并启动</span></span><br><span class="line"><span class="comment">// 这里使用TSimpleServer，实际情况可用其他实现</span></span><br><span class="line">TServer server = <span class="keyword">new</span> TSimpleServer(tArgs);</span><br><span class="line">server.serve();</span><br></pre></td></tr></table></figure>
-
 
     </div>
 
@@ -300,6 +319,12 @@
 
 
       <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/JAVA/" rel="tag"># JAVA</a>
+              <a href="/tags/RPC/" rel="tag"># RPC</a>
+              <a href="/tags/C/" rel="tag"># C#</a>
+              <a href="/tags/%E8%B7%A8%E8%AF%AD%E8%A8%80/" rel="tag"># 跨语言</a>
+          </div>
 
         
 
@@ -307,12 +332,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2022/05/15/Tomcat%E6%BA%90%E7%A0%81%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0--1/" rel="prev" title="">
-      <i class="fa fa-chevron-left"></i> 
+    <a href="/2022/04/28/Tomcat%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E2%80%94%E2%80%94%E2%80%94%E2%80%94Tomcat%E7%B1%BB%E5%8A%A0%E8%BD%BD/" rel="prev" title="Tomcat源码分析————Tomcat类加载">
+      <i class="fa fa-chevron-left"></i> Tomcat源码分析————Tomcat类加载
     </a></div>
       <div class="post-nav-item">
-    <a href="/2022/08/04/JAVA%E4%B8%8EC++%E4%BA%A4%E4%BA%92%EF%BC%88JNI%EF%BC%89/" rel="next" title="">
-       <i class="fa fa-chevron-right"></i>
+    <a href="/2022/08/09/JAR%E5%8C%85%E5%8A%A0%E5%AF%86class%E6%96%87%E4%BB%B6%E9%98%B2%E6%AD%A2%E5%8F%8D%E7%BC%96%E8%AF%91/" rel="next" title="JAR包加密class文件防止反编译">
+      JAR包加密class文件防止反编译 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -389,20 +414,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">18</span>
+          <span class="site-state-item-count">17</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-count">12</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">17</span>
+        <span class="site-state-item-count">22</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
