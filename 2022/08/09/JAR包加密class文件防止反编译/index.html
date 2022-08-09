@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="前言通常来说，将代码打成jar包后，可以通过反编译工具得到源码。这对于代码隐蔽性是极大的挑战。常用的加密方式有代码混淆、编译加密运行动态解密、魔改JVM等； 本文采用第二种方式； 编译期加密前言首先要知道，代码变为jar包需要经过编译的；maven将编译后的class文件统一打成jar包。但是这样，就等于泄露了代码源文件。所以需要在maven编译时做出调整，将指定的class替换成加密后的clas">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JAR包加密class文件防止反编译">
+<meta property="og:url" content="http://example.com/2022/08/09/JAR%E5%8C%85%E5%8A%A0%E5%AF%86class%E6%96%87%E4%BB%B6%E9%98%B2%E6%AD%A2%E5%8F%8D%E7%BC%96%E8%AF%91/index.html">
+<meta property="og:site_name" content="iBubuzi">
+<meta property="og:description" content="前言通常来说，将代码打成jar包后，可以通过反编译工具得到源码。这对于代码隐蔽性是极大的挑战。常用的加密方式有代码混淆、编译加密运行动态解密、魔改JVM等； 本文采用第二种方式； 编译期加密前言首先要知道，代码变为jar包需要经过编译的；maven将编译后的class文件统一打成jar包。但是这样，就等于泄露了代码源文件。所以需要在maven编译时做出调整，将指定的class替换成加密后的clas">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2022/08/09/s2ETPfuq19XRdUY.png">
+<meta property="og:image" content="https://s2.loli.net/2022/08/09/evlqKtF9EHB1Lg2.png">
+<meta property="og:image" content="https://s2.loli.net/2022/08/09/j5XEgWHGUIR93nb.png">
+<meta property="og:image" content="https://s2.loli.net/2022/08/09/n3NaTOxPQclvXzK.png">
+<meta property="og:image" content="https://s2.loli.net/2022/08/09/c6bvi7ptkFq1YAN.png">
+<meta property="og:image" content="https://s2.loli.net/2022/08/09/NWAUI8zZ3PMaulE.png">
+<meta property="og:image" content="https://s2.loli.net/2022/08/09/bsnF6YT95vSeZUy.png">
+<meta property="og:image" content="https://s2.loli.net/2022/08/09/Cer1kmRSciWExvy.png">
+<meta property="article:published_time" content="2022-08-09T01:09:06.000Z">
+<meta property="article:modified_time" content="2022-08-09T01:56:38.477Z">
+<meta property="article:author" content="布布子">
+<meta property="article:tag" content="JNI">
+<meta property="article:tag" content="加密">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2022/08/09/s2ETPfuq19XRdUY.png">
+
+<link rel="canonical" href="http://example.com/2022/08/09/JAR%E5%8C%85%E5%8A%A0%E5%AF%86class%E6%96%87%E4%BB%B6%E9%98%B2%E6%AD%A2%E5%8F%8D%E7%BC%96%E8%AF%91/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>JAR包加密class文件防止反编译 | iBubuzi</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="iBubuzi" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+    <a target="_blank" rel="noopener" href="https://github.com/ibubuzi" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">iBubuzi</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/08/09/JAR%E5%8C%85%E5%8A%A0%E5%AF%86class%E6%96%87%E4%BB%B6%E9%98%B2%E6%AD%A2%E5%8F%8D%E7%BC%96%E8%AF%91/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="布布子">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="iBubuzi">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          JAR包加密class文件防止反编译
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-08-09 09:09:06 / 修改时间：09:56:38" itemprop="dateCreated datePublished" datetime="2022-08-09T09:09:06+08:00">2022-08-09</time>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>11k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>10 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>通常来说，将代码打成jar包后，可以通过反编译工具得到源码。这对于代码隐蔽性是极大的挑战。常用的加密方式有代码混淆、编译加密运行动态解密、魔改JVM等；</p>
+<p>本文采用第二种方式；</p>
+<h2 id="编译期加密"><a href="#编译期加密" class="headerlink" title="编译期加密"></a>编译期加密</h2><h3 id="前言-1"><a href="#前言-1" class="headerlink" title="前言"></a>前言</h3><p>首先要知道，代码变为jar包需要经过编译的；maven将编译后的class文件统一打成jar包。但是这样，就等于泄露了代码源文件。所以需要在maven编译时做出调整，将指定的class替换成加密后的class，然后再打进jar包；</p>
+<h3 id="maven插件"><a href="#maven插件" class="headerlink" title="maven插件"></a>maven插件</h3><p>通过自定义maven插件进行的实现</p>
+<p>首先我们来看pom.xml文件</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">groupId</span>&gt;</span>top.bubuzi<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>encryption-maven-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!--    注意，这里的打包模式必须是maven-plugin   --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">packaging</span>&gt;</span>maven-plugin<span class="tag">&lt;/<span class="name">packaging</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">version</span>&gt;</span>bubuzi.changsha.RS1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!--        maven插件开发需引入的依赖     --&gt;</span></span><br><span class="line"><span class="comment">&lt;!--        版本随你的maven版本变动     --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.maven<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>maven-plugin-api<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.8.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>编写插件加密类</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> top.bubuzi;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> top.bubuzi.SafeLoaderUtil;</span><br><span class="line"><span class="keyword">import</span> org.apache.maven.plugin.AbstractMojo;</span><br><span class="line"><span class="keyword">import</span> org.apache.maven.plugin.MojoExecutionException;</span><br><span class="line"><span class="keyword">import</span> org.apache.maven.plugin.MojoFailureException;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.File;</span><br><span class="line"><span class="keyword">import</span> java.io.FileInputStream;</span><br><span class="line"><span class="keyword">import</span> java.io.FileOutputStream;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@goal</span> deepcompile</span></span><br><span class="line"><span class="comment"> **/</span></span><br><span class="line"><span class="comment">//@Mojo(name = &quot;brakeFramePlugin&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FramePlugin</span> <span class="keyword">extends</span> <span class="title">AbstractMojo</span> </span>&#123;</span><br><span class="line">	<span class="comment">// 这里前三个成员变量注释请勿修改，这是读取maven配置的固定写法</span></span><br><span class="line">    <span class="comment">// 当然也有使用@Mojo的写法，需要引入额外的依赖，这里不做多介绍</span></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@parameter</span> property=&quot;protectClassNames&quot; default-value=&quot;&quot;</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> List&lt;String&gt; protectClassNames;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@parameter</span> property=&quot;noCompileClassNames&quot; default-value=&quot;&quot;</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> List&lt;String&gt; noCompileClassNames;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@parameter</span> property=&quot;output&quot; default-value=&quot;$&#123;project.build.directory&#125;&quot;</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> String root;</span><br><span class="line">    <span class="keyword">private</span> File output;</span><br><span class="line">    <span class="keyword">private</span> List&lt;String&gt; protectClassNameList = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">execute</span><span class="params">()</span> <span class="keyword">throws</span> MojoExecutionException, MojoFailureException </span>&#123;</span><br><span class="line">        getLog().info(<span class="string">&quot;执行jar包加密操作&quot;</span>);</span><br><span class="line">        <span class="keyword">this</span>.output = <span class="keyword">new</span> File(root);</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">this</span>.protectCore(<span class="keyword">this</span>.output);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">protectCore</span><span class="params">(File root)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (root.isDirectory()) &#123;</span><br><span class="line">            <span class="keyword">for</span> (File file : root.listFiles()) &#123;</span><br><span class="line">                protectCore(file);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (root.getName().endsWith(<span class="string">&quot;.class&quot;</span>)) &#123;</span><br><span class="line">            String className = root.getName().replace(<span class="string">&quot;.class&quot;</span>, <span class="string">&quot;&quot;</span>);</span><br><span class="line">            <span class="comment">//class筛选</span></span><br><span class="line">            <span class="keyword">boolean</span> flag = <span class="keyword">false</span>;</span><br><span class="line">            <span class="keyword">if</span> (protectClassNames != <span class="keyword">null</span> &amp;&amp; protectClassNames.size() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                <span class="keyword">for</span> (String item : protectClassNames) &#123;</span><br><span class="line">                    <span class="keyword">if</span> (className.equals(item)) &#123;</span><br><span class="line">                        flag = <span class="keyword">true</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (noCompileClassNames.contains(className)) &#123;</span><br><span class="line">                <span class="keyword">boolean</span> deleteResult = root.delete();</span><br><span class="line">                <span class="keyword">if</span> (!deleteResult) &#123;</span><br><span class="line">                    System.gc();</span><br><span class="line">                    deleteResult = root.delete();</span><br><span class="line">                &#125;</span><br><span class="line">                getLog().info(String.format(<span class="string">&quot;[noCompile-deleteResult]:%s&quot;</span>, deleteResult));</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (flag &amp;&amp; !protectClassNameList.contains(className)) &#123;</span><br><span class="line">                protectClassNameList.add(className);</span><br><span class="line">                getLog().info(String.format(<span class="string">&quot;[protectCore]:%s&quot;</span>, className));</span><br><span class="line">                FileOutputStream fos = <span class="keyword">null</span>;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    <span class="keyword">final</span> <span class="keyword">byte</span>[] instrumentBytes = doProtectCore(root);</span><br><span class="line">                    <span class="comment">//加密后的class文件保存路径</span></span><br><span class="line">                    String folderPath = output.getAbsolutePath() + <span class="string">&quot;\\&quot;</span> + <span class="string">&quot;classes&quot;</span>;</span><br><span class="line">                    File folder = <span class="keyword">new</span> File(folderPath);</span><br><span class="line">                    <span class="keyword">if</span> (!folder.exists()) &#123;</span><br><span class="line">                        folder.mkdir();</span><br><span class="line">                    &#125;</span><br><span class="line">                    folderPath = output.getAbsolutePath() + <span class="string">&quot;\\&quot;</span> + <span class="string">&quot;classes&quot;</span> + <span class="string">&quot;\\&quot;</span> + <span class="string">&quot;coreclass&quot;</span>;</span><br><span class="line">                    folder = <span class="keyword">new</span> File(folderPath);</span><br><span class="line">                    <span class="keyword">if</span> (!folder.exists()) &#123;</span><br><span class="line">                        folder.mkdir();</span><br><span class="line">                    &#125;</span><br><span class="line">                    String filePath = output.getAbsolutePath() + <span class="string">&quot;\\&quot;</span> + <span class="string">&quot;classes&quot;</span> + <span class="string">&quot;\\&quot;</span> + <span class="string">&quot;coreclass&quot;</span> + <span class="string">&quot;\\&quot;</span> + className + <span class="string">&quot;.class&quot;</span>;</span><br><span class="line">                    getLog().info(<span class="string">&quot;[filePath]: &quot;</span> + filePath);</span><br><span class="line">                    File protectFile = <span class="keyword">new</span> File(filePath);</span><br><span class="line">                    <span class="keyword">if</span> (protectFile.exists()) &#123;</span><br><span class="line">                        protectFile.delete();</span><br><span class="line">                    &#125;</span><br><span class="line">                    protectFile.createNewFile();</span><br><span class="line">                    fos = <span class="keyword">new</span> FileOutputStream(protectFile);</span><br><span class="line">                    fos.write(instrumentBytes);</span><br><span class="line">                    fos.flush();</span><br><span class="line">                &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">                    getLog().info(<span class="string">&quot;[protectCore-exception]:&quot;</span> + className);</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">                    <span class="keyword">if</span> (fos != <span class="keyword">null</span>) &#123;</span><br><span class="line">                        fos.close();</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">if</span> (root.exists()) &#123;</span><br><span class="line">                        <span class="keyword">boolean</span> deleteResult = root.delete();</span><br><span class="line">                        <span class="keyword">if</span> (!deleteResult) &#123;</span><br><span class="line">                            System.gc();</span><br><span class="line">                            deleteResult = root.delete();</span><br><span class="line">                        &#125;</span><br><span class="line">                        getLog().info(<span class="string">&quot;[protectCore-deleteResult]:&quot;</span> + deleteResult);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">byte</span>[] doProtectCore(File clsFile) <span class="keyword">throws</span> MojoExecutionException &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            FileInputStream inputStream = <span class="keyword">new</span> FileInputStream(clsFile);</span><br><span class="line">            <span class="keyword">byte</span>[] bytes = <span class="keyword">new</span> <span class="keyword">byte</span>[(<span class="keyword">int</span>) clsFile.length()];</span><br><span class="line">            getLog().info(<span class="string">&quot;origin length:&quot;</span> + bytes.length);</span><br><span class="line">            inputStream.read(bytes);</span><br><span class="line">            <span class="comment">// jdk9+</span></span><br><span class="line"><span class="comment">//            byte[] bytes = inputStream.readAllBytes();</span></span><br><span class="line">            <span class="comment">// SafeLoaderUtil.encryption加密为JNI调用的C++程序，可以采用不同实现</span></span><br><span class="line">            <span class="keyword">byte</span>[] encipherByte = SafeLoaderUtil.encryption(bytes);</span><br><span class="line">            inputStream.close();</span><br><span class="line">            <span class="keyword">return</span> encipherByte;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> MojoExecutionException(<span class="string">&quot;doProtectCore error&quot;</span>, e);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>代码种的SafeLoaderUtil.encryption的JNI调用方法可参考上一篇文章</p>
+<h3 id="maven插件打包安装"><a href="#maven插件打包安装" class="headerlink" title="maven插件打包安装"></a>maven插件打包安装</h3><p><strong>一定要安装至本地！！！</strong></p>
+<p><strong>一定要安装至本地！！！</strong></p>
+<p><strong>一定要安装至本地！！！</strong></p>
+<p><img src="https://s2.loli.net/2022/08/09/s2ETPfuq19XRdUY.png" alt="image-20220809092513798"></p>
+<h3 id="加密项目配置"><a href="#加密项目配置" class="headerlink" title="加密项目配置"></a>加密项目配置</h3><h4 id="pom-xml"><a href="#pom-xml" class="headerlink" title="pom.xml"></a>pom.xml</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">build</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">plugins</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!--            引入maven加密插件     --&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">plugin</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>top.bubuzi<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">				<span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>encryption-maven-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">version</span>&gt;</span>bubuzi.changsha.RS1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">executions</span>&gt;</span></span><br><span class="line">                    <span class="comment">&lt;!--            必须填写，设置编译器动作     --&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">execution</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">phase</span>&gt;</span>compile<span class="tag">&lt;/<span class="name">phase</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">goals</span>&gt;</span></span><br><span class="line">                            <span class="tag">&lt;<span class="name">goal</span>&gt;</span>deepcompile<span class="tag">&lt;/<span class="name">goal</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;/<span class="name">goals</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;/<span class="name">execution</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">executions</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">                    <span class="comment">&lt;!--            这里可改为全类名，暂时未优化     --&gt;</span></span><br><span class="line">                    <span class="comment">&lt;!--            写入需要加密的类名称     --&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">protectClassNames</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">protectClassName</span>&gt;</span>LoginServiceImpl<span class="tag">&lt;/<span class="name">protectClassName</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;/<span class="name">protectClassNames</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">plugin</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">plugins</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">build</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="打包"><a href="#打包" class="headerlink" title="打包"></a>打包</h4><p>配置好pom后，就可以愉快的打包了</p>
+<p>可以看见，日志中正确输出了打包相关内容。</p>
+<p><img src="https://s2.loli.net/2022/08/09/evlqKtF9EHB1Lg2.png" alt="image-20220809093251630"></p>
+<p>项目结构里，LoginServiceImpl类应该存在于impl包下</p>
+<p><img src="https://s2.loli.net/2022/08/09/j5XEgWHGUIR93nb.png" alt="image-20220809093411656"></p>
+<p>查看jar包内结构</p>
+<p>使用压缩包的模式打开jar</p>
+<p><img src="https://s2.loli.net/2022/08/09/n3NaTOxPQclvXzK.png" alt="image-20220809093533570"></p>
+<p><img src="https://s2.loli.net/2022/08/09/c6bvi7ptkFq1YAN.png" alt="image-20220809093548178"></p>
+<p><img src="https://s2.loli.net/2022/08/09/NWAUI8zZ3PMaulE.png" alt="image-20220809093632308"></p>
+<p><img src="https://s2.loli.net/2022/08/09/bsnF6YT95vSeZUy.png" alt="image-20220809093702549"><br>可以看见，本应在impl包下的LoginServiceImpl类，去了coreclass文件夹下</p>
+<p>这就是加密完成</p>
+<p>通过idea反编译加密class文件，可以看见根本无法查阅</p>
+<p><img src="https://s2.loli.net/2022/08/09/Cer1kmRSciWExvy.png" alt="image-20220809095217583"></p>
+<h2 id="解密"><a href="#解密" class="headerlink" title="解密"></a>解密</h2><h3 id="运行时解密"><a href="#运行时解密" class="headerlink" title="运行时解密"></a>运行时解密</h3><p>在这里我查阅了许多资料，始终没能找到使我满意的解答方式；</p>
+<p>这与springboot的加载机制有关系，起初我想用classloader的方式动态加载，一直未能成功，感兴趣的同志可以去了解以下springboot的加载机制，还有要注意jdk版本问题，jdk8及以下与jdk8以上的类加载机制有部分变化；</p>
+<p>最终采用的一种折中方案；</p>
+<p>我们都知道，spring会将beanClass封装成一个BeanDefinition对象，然后再通过bean别名，一一对应的方式注册进IOC容器；</p>
+<p>所以，我们只需要在spring容器启动后，手动将加密类注册进容器，后续bean创建时，就会使用我们注入的class；</p>
+<h3 id="解密类"><a href="#解密类" class="headerlink" title="解密类"></a>解密类</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StaticEncryptLoader</span> <span class="keyword">extends</span> <span class="title">ClassLoader</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> StaticEncryptLoader INSTANCE;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// spring bean 默认bean工厂</span></span><br><span class="line">    <span class="meta">@Setter</span></span><br><span class="line">    <span class="keyword">private</span> DefaultListableBeanFactory beanFactory;</span><br><span class="line">    <span class="comment">// 用于存储class类</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Map&lt;String, Class&gt; classes = <span class="keyword">new</span> ConcurrentHashMap();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        <span class="comment">// jni调用，请查看上一章</span></span><br><span class="line">        System.loadLibrary(<span class="string">&quot;EncryptionLoader&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">StaticEncryptLoader</span><span class="params">(ClassLoader parent)</span></span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(parent);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span>  StaticEncryptLoader <span class="title">getInstance</span><span class="params">(ClassLoader parent)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(INSTANCE == <span class="keyword">null</span>)&#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (StaticEncryptLoader.class)&#123;</span><br><span class="line">                <span class="keyword">if</span>(INSTANCE == <span class="keyword">null</span>)&#123;</span><br><span class="line">                    INSTANCE = <span class="keyword">new</span> StaticEncryptLoader(parent);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> INSTANCE;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> StaticEncryptLoader <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> INSTANCE;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 用于加载所有加密类</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">start</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            loadClasses2Cache();</span><br><span class="line"><span class="comment">//            checkPool.scheduleWithFixedDelay(() -&gt; &#123;</span></span><br><span class="line"><span class="comment">//                try &#123;</span></span><br><span class="line"><span class="comment">//                    loadClasses2Cache();</span></span><br><span class="line"><span class="comment">//                &#125; catch (IOException e) &#123;</span></span><br><span class="line"><span class="comment">//                    e.printStackTrace();</span></span><br><span class="line"><span class="comment">//                &#125;</span></span><br><span class="line"><span class="comment">//            &#125;, 60, 60, TimeUnit.SECONDS);</span></span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">loadClasses2Cache</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        Resource[] resources = <span class="keyword">new</span> PathMatchingResourcePatternResolver().getResources(<span class="string">&quot;/coreclass/**/*.class&quot;</span>);</span><br><span class="line">        <span class="keyword">for</span>(Resource resource : resources) &#123;</span><br><span class="line">            <span class="keyword">byte</span> pack[] = <span class="keyword">null</span>;</span><br><span class="line">            InputStream inputStream = resource.getInputStream();</span><br><span class="line">            <span class="keyword">int</span> count = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">while</span>(count == <span class="number">0</span>)&#123;</span><br><span class="line">                count = inputStream.available();</span><br><span class="line">            &#125;</span><br><span class="line">            pack = <span class="keyword">new</span> <span class="keyword">byte</span>[count];</span><br><span class="line">            <span class="keyword">int</span> readCount = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">while</span> (readCount &lt; count) &#123;</span><br><span class="line">                readCount += inputStream.read(pack, readCount, count - readCount);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">byte</span>[] decryption = SafeLoaderUtil.decryption(pack);</span><br><span class="line">            Class&lt;?&gt; aClass = <span class="keyword">null</span>;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                aClass = defineClass(<span class="string">&quot;top.bubuzi.service.impl.LoginServiceImpl&quot;</span>, decryption, <span class="number">0</span>, decryption.length);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (ClassFormatError classFormatError) &#123;</span><br><span class="line">                classFormatError.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// 由于现在只写了一个加密类，直接全类名注入了，实际操作时，需要将全路径匹配为全类名</span></span><br><span class="line">            <span class="comment">// 如，现在为coreclass/LoginServiceImpl，后续调整为，coreclass</span></span><br><span class="line">            classes.put(<span class="string">&quot;top.bubuzi.service.impl.LoginServiceImpl&quot;</span>,aClass);</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">registryBeans</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (!CollectionUtils.isEmpty(classes) &amp;&amp; beanFactory != <span class="keyword">null</span>) &#123;</span><br><span class="line">            classes.forEach(</span><br><span class="line">                    (k, v) -&gt; &#123;</span><br><span class="line">                        registryBean(k);</span><br><span class="line">                    &#125;</span><br><span class="line">            );</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 向spring容器注入beanDefinition</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> className 全限定名 (com.xxx.xx.XXXX)</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">registryBean</span><span class="params">(String className)</span> </span>&#123;</span><br><span class="line">        Class cla = classes.get(className.replace(<span class="string">&quot;.class&quot;</span>, <span class="string">&quot;&quot;</span>).replaceAll(<span class="string">&quot;/&quot;</span>, <span class="string">&quot;.&quot;</span>));</span><br><span class="line">        <span class="keyword">if</span> (SpringUtil.isSpringBeanClass(cla) &amp;&amp; beanFactory != <span class="keyword">null</span>) &#123;</span><br><span class="line">            BeanDefinition beanDefinition = SpringUtil.buildBeanDefinition(cla);</span><br><span class="line">            <span class="comment">//将变量首字母置小写</span></span><br><span class="line">            String beanName = StringUtils.uncapitalize(className);</span><br><span class="line">            beanName = beanName.substring(beanName.lastIndexOf(<span class="string">&quot;.&quot;</span>) + <span class="number">1</span>);</span><br><span class="line">            beanName = StringUtils.uncapitalize(beanName);</span><br><span class="line">            <span class="comment">// 注意，这里的beanName为ioc容器自动注入提供服务，请确保你的容器名称是否匹配</span></span><br><span class="line">            safeRegistry(className, beanDefinition);</span><br><span class="line">            safeRegistry(beanName, beanDefinition);</span><br><span class="line">            <span class="keyword">if</span>(beanName.endsWith(<span class="string">&quot;Impl&quot;</span>) )&#123;</span><br><span class="line">                safeRegistry(beanName.replace(<span class="string">&quot;Impl&quot;</span>,<span class="string">&quot;&quot;</span>), beanDefinition);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">safeRegistry</span><span class="params">(String name,BeanDefinition beanDefinition)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(!beanFactory.containsBean(name))&#123;</span><br><span class="line">            beanFactory.registerBeanDefinition(name,beanDefinition);</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            Object bean = beanFactory.getBean(name);</span><br><span class="line">            System.out.println(name);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="容器加载类"><a href="#容器加载类" class="headerlink" title="容器加载类"></a>容器加载类</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SpringRegistry</span> <span class="keyword">implements</span> <span class="title">BeanFactoryPostProcessor</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">postProcessBeanFactory</span><span class="params">(ConfigurableListableBeanFactory beanFactory)</span> <span class="keyword">throws</span> BeansException </span>&#123;</span><br><span class="line">        StaticEncryptLoader instance = StaticEncryptLoader.getInstance();</span><br><span class="line">        <span class="keyword">if</span>(instance==<span class="keyword">null</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        instance.setBeanFactory((DefaultListableBeanFactory) beanFactory);</span><br><span class="line">        <span class="keyword">if</span>(!(beanFactory.getBeanClassLoader() <span class="keyword">instanceof</span> StaticEncryptLoader))&#123;</span><br><span class="line">            beanFactory.setBeanClassLoader(instance);</span><br><span class="line">        &#125;</span><br><span class="line">        instance.registryBeans();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="启动类"><a href="#启动类" class="headerlink" title="启动类"></a>启动类</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@SpringBootApplication(scanBasePackages = &quot;top.bubuzi&quot;)</span></span><br><span class="line"><span class="meta">@MapperScan(&quot;top.bubuzi.mapper&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PlatformApplication</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 加载加密类元信息</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        StaticEncryptLoader instance = StaticEncryptLoader.getInstance(PlatformApplication.class.getClassLoader());</span><br><span class="line">        instance.start();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        SpringApplication.run(PlatformApplication.class, args);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>启动后正常无报错即加密成功</p>
+<h2 id="后文"><a href="#后文" class="headerlink" title="后文"></a>后文</h2><p>本方法只能避免jar包直接被反编译，不能实现完全的加密防护，实际上百分百防护是做不到的；</p>
+<p>但是这里依旧有优化项点：</p>
+<pre><code>*    不采用beanFactory，而采用classLoader的方式
+*    加密classLoader，隐藏解密程序，classLoader采用分片注入程序的方式
+*    核心代码用安全性高的语言实现，如c++实现后jni调用
+*    魔改JVM加载机制
+</code></pre>
+<p>希望本文能帮到你</p>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>Donate comment here.</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="布布子 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/JNI/" rel="tag"># JNI</a>
+              <a href="/tags/%E5%8A%A0%E5%AF%86/" rel="tag"># 加密</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/08/04/JAVA%E4%B8%8EC++%E4%BA%A4%E4%BA%92%EF%BC%88JNI%EF%BC%89/" rel="prev" title="">
+      <i class="fa fa-chevron-left"></i> 
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E8%AF%91%E6%9C%9F%E5%8A%A0%E5%AF%86"><span class="nav-number">2.</span> <span class="nav-text">编译期加密</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%89%8D%E8%A8%80-1"><span class="nav-number">2.1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#maven%E6%8F%92%E4%BB%B6"><span class="nav-number">2.2.</span> <span class="nav-text">maven插件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#maven%E6%8F%92%E4%BB%B6%E6%89%93%E5%8C%85%E5%AE%89%E8%A3%85"><span class="nav-number">2.3.</span> <span class="nav-text">maven插件打包安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%A0%E5%AF%86%E9%A1%B9%E7%9B%AE%E9%85%8D%E7%BD%AE"><span class="nav-number">2.4.</span> <span class="nav-text">加密项目配置</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#pom-xml"><span class="nav-number">2.4.1.</span> <span class="nav-text">pom.xml</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%89%93%E5%8C%85"><span class="nav-number">2.4.2.</span> <span class="nav-text">打包</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E5%AF%86"><span class="nav-number">3.</span> <span class="nav-text">解密</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%90%E8%A1%8C%E6%97%B6%E8%A7%A3%E5%AF%86"><span class="nav-number">3.1.</span> <span class="nav-text">运行时解密</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E5%AF%86%E7%B1%BB"><span class="nav-number">3.2.</span> <span class="nav-text">解密类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%B9%E5%99%A8%E5%8A%A0%E8%BD%BD%E7%B1%BB"><span class="nav-number">3.3.</span> <span class="nav-text">容器加载类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%AF%E5%8A%A8%E7%B1%BB"><span class="nav-number">3.4.</span> <span class="nav-text">启动类</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%8E%E6%96%87"><span class="nav-number">4.</span> <span class="nav-text">后文</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="布布子"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">布布子</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">18</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">17</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ibubuzi" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ibubuzi" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:yzw16905@foxmail.com" title="E-Mail → mailto:yzw16905@foxmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">布布子</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">44k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">40 分钟</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+  <script defer src="/lib/three/three.min.js"></script>
+    <script defer src="/lib/three/three-waves.min.js"></script>
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : 'd42a328d596c2759192b',
+      clientSecret: 'f30ea194834638bba7ef02b39331e0b0f469088b',
+      repo        : 'ibubuzi.github.io',
+      owner       : 'ibubuzi',
+      admin       : ['ibubuzi'],
+      id          : '33902249c1ddc70aad659112fddc2d86',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>
